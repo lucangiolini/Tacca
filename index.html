@@ -1,0 +1,1594 @@
+<!doctype html>
+<html lang="it" data-tema="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tacca</title>
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0A10" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tacca">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+*{box-sizing:border-box}
+:root{
+  --acc:#D2461F;--acc-t:var(--acc);
+  --bg:#F2F2F7;--ink:#1D1D1F;--mut:#66666C;
+  --glass:rgba(255,255,255,.55);--glass2:rgba(255,255,255,.78);--glass3:rgba(255,255,255,.86);--gb:rgba(255,255,255,.7);--line:rgba(60,60,67,.16);
+  --sh:0 8px 32px rgba(40,40,90,.10);
+  --ok:#1E6B3A;--okbg:#E3F1E8;--warn:#8A5F00;--warnbg:#FBF0D6;--onwarn:#fff;
+  --tint:color-mix(in srgb,var(--acc) 24%,#fff);--shp:var(--acc);
+  --serif:ui-serif,'New York','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --sans:-apple-system,'SF Pro Text','Helvetica Neue',system-ui,'Segoe UI',Roboto,sans-serif;
+  --blob:.34;color-scheme:light;
+}
+:root[data-tema="scuro"]{
+  --acc-t:color-mix(in srgb,var(--acc) 50%,#fff);--shp:var(--acc-t);
+  --bg:#0A0A10;--ink:#F5F5F7;--mut:#A6A6B0;
+  --glass:rgba(34,34,48,.5);--glass2:rgba(60,60,80,.55);--glass3:rgba(26,26,38,.88);--gb:rgba(255,255,255,.12);--line:rgba(255,255,255,.16);
+  --sh:0 8px 32px rgba(0,0,0,.4);
+  --ok:#74D69E;--okbg:rgba(116,214,158,.16);--warn:#F0C265;--warnbg:rgba(240,194,101,.16);--onwarn:#1D1D1F;
+  --tint:color-mix(in srgb,var(--acc) 38%,#14141c);--blob:.42;color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root[data-tema="auto"]{
+    --acc-t:color-mix(in srgb,var(--acc) 50%,#fff);--shp:var(--acc-t);
+    --bg:#0A0A10;--ink:#F5F5F7;--mut:#A6A6B0;
+    --glass:rgba(34,34,48,.5);--glass2:rgba(60,60,80,.55);--glass3:rgba(26,26,38,.88);--gb:rgba(255,255,255,.12);--line:rgba(255,255,255,.16);
+    --sh:0 8px 32px rgba(0,0,0,.4);
+    --ok:#74D69E;--okbg:rgba(116,214,158,.16);--warn:#F0C265;--warnbg:rgba(240,194,101,.16);--onwarn:#1D1D1F;
+    --tint:color-mix(in srgb,var(--acc) 38%,#14141c);--blob:.42;color-scheme:dark;
+  }
+}
+html{background:var(--bg)}
+html,body{margin:0;min-height:100%;color:var(--ink);font-family:var(--sans);font-size:16px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none;touch-action:manipulation}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;-webkit-user-select:none;user-select:none}
+button:disabled{cursor:default}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:3px solid var(--acc-t);outline-offset:3px}
+.serif{font-family:var(--serif);font-weight:500}
+
+/* sfondo con trasparenze */
+#bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+#bg i{position:absolute;border-radius:50%;filter:blur(72px);opacity:var(--blob);will-change:transform}
+#bg .b1{width:380px;height:380px;left:-130px;top:-110px;background:var(--acc);animation:d1 38s ease-in-out infinite alternate}
+#bg .b2{width:340px;height:340px;right:-140px;top:34%;background:#E3A93B;animation:d2 46s ease-in-out infinite alternate}
+#bg .b3{width:320px;height:320px;left:-60px;bottom:-110px;background:#2F7F78;animation:d3 42s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(90px,120px)}}
+@keyframes d2{to{transform:translate(-110px,-90px)}}
+@keyframes d3{to{transform:translate(120px,-70px)}}
+.mgrid{position:absolute;top:-70px;right:-70px;width:204px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;opacity:.7}
+.mgrid b{height:60px;border-radius:16px;background:color-mix(in srgb,var(--acc) 17%,transparent)}
+.mgrid b:nth-child(even){background:color-mix(in srgb,var(--acc) 28%,transparent)}
+.mgrid b:last-child{background:none;border:2px dashed var(--acc-t)}
+
+/* vetro */
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(175%);backdrop-filter:blur(26px) saturate(175%);border:1px solid var(--gb);box-shadow:var(--sh);border-radius:24px}
+.card{padding:20px;display:flex;flex-direction:column;gap:12px}
+
+/* schermate */
+.scr{max-width:480px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 30px) 20px calc(150px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:22px}
+.scr.ses,.scr.mid{padding-bottom:36px}
+.scr.ses{gap:16px;padding-top:calc(env(safe-area-inset-top) + 18px)}
+.scr.mid{min-height:100dvh;justify-content:center}
+.enter{animation:enter .38s cubic-bezier(.2,.9,.3,1)}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}}
+.hd .sm{margin-bottom:2px}
+.h1{font-size:40px;letter-spacing:-.01em;line-height:1.1}
+.big{font-size:50px;font-weight:400;letter-spacing:-.02em;line-height:1.05}
+.big2{font-size:38px;letter-spacing:-.015em;line-height:1.1}
+.h3{font-size:22px;line-height:1.15}.h4{font-size:20px;line-height:1.2}
+.q{font-size:26px;line-height:1.15;letter-spacing:-.01em}
+.mut{color:var(--mut)}.sm{font-size:13px}.sm2{font-size:14px;color:var(--mut)}
+.t17{font-size:17px;font-weight:600}.t15{font-size:15px;font-weight:500}
+.stack{display:flex;flex-direction:column;gap:12px}
+.note{padding:0 4px}
+
+/* home */
+.ens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.en{height:80px;border-radius:20px;border:1px solid var(--gb);background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:var(--sh);transition:transform .15s,background .2s}
+.en b{font-size:15px;font-weight:600}.en small{font-size:12px;color:var(--mut)}
+.en:active{transform:scale(.97)}
+.en.on{background:var(--acc);color:#fff;border-color:transparent}
+.en.on small{color:rgba(255,255,255,.85)}
+.stps{display:flex}
+.stp{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.stl{width:100%;display:flex;align-items:center}
+.stl i{flex:1;height:2px;background:var(--line)}.stl i.blank{background:transparent}
+.stl b{width:30px;height:30px;border-radius:15px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.stl b.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.stn{font-size:15px;font-weight:600;text-align:center}
+.stm{font-size:13px;color:var(--mut);margin-top:-6px}
+.today{display:flex;align-items:center;gap:10px;padding-left:4px;font-size:14px}
+.scr.home{min-height:100vh;min-height:100dvh;padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+.cta{margin-top:auto;padding-top:8px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.lnk{background:none;border:0;padding:8px;font-size:14px;color:var(--acc-t);text-decoration:underline;text-underline-offset:3px;text-align:center}
+.slide{--p:0;position:relative;height:68px;border-radius:34px;overflow:hidden;background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(175%);backdrop-filter:blur(26px) saturate(175%);border:1px solid var(--gb);box-shadow:var(--sh);touch-action:pan-y;cursor:pointer;-webkit-user-select:none;user-select:none}
+.slide::before{content:'';position:absolute;left:0;top:0;bottom:0;width:calc(66px + var(--p)*(100% - 66px));background:color-mix(in srgb,var(--acc) 22%,transparent);border-radius:34px}
+.slt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:44px;font-size:17px;font-weight:500;opacity:calc(1 - var(--p)*1.5);pointer-events:none}
+.shim{background:linear-gradient(100deg,var(--mut) 34%,var(--ink) 50%,var(--mut) 66%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:shim 2.8s linear infinite}
+@keyframes shim{from{background-position:120% 0}to{background-position:-120% 0}}
+.thumb{position:absolute;left:6px;top:6px;width:54px;height:54px;border-radius:27px;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px color-mix(in srgb,var(--acc) 45%,transparent);touch-action:none;cursor:grab;transition:transform .42s cubic-bezier(.2,.9,.3,1.15)}
+.slide.drag .thumb{transition:none;cursor:grabbing}
+.chv{position:absolute;right:22px;top:26px;color:var(--mut);opacity:calc(1 - var(--p)*2)}
+
+/* dock */
+.dock{position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 40px),440px);height:68px;padding:6px;border-radius:34px;display:flex;gap:4px;align-items:center;background:var(--glass3);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border:1px solid var(--gb);box-shadow:0 10px 34px rgba(0,0,0,.14);transition:transform .45s cubic-bezier(.2,.9,.3,1)}
+.dock.hide{transform:translate(-50%,160%)}
+.dk{flex:1;height:54px;border:0;border-radius:27px;background:transparent;color:var(--mut);display:flex;align-items:center;justify-content:center;gap:0;transition:flex .4s cubic-bezier(.3,.9,.3,1),background .25s,color .25s;overflow:hidden}
+.dk span{max-width:0;opacity:0;overflow:hidden;white-space:nowrap;font-size:15px;font-weight:600;transition:max-width .4s,opacity .3s,margin .4s}
+.dk.on{flex:2.4;background:color-mix(in srgb,var(--acc) 17%,transparent);color:var(--acc-t)}
+.dk.on span{max-width:96px;opacity:1;margin-left:8px}
+
+/* allena */
+.area{flex-direction:row;align-items:center;gap:14px;padding:16px}
+.mini{width:52px;height:52px;flex:none}.mini svg{width:100%;height:100%}.mi{fill:var(--acc-t)}
+.ainfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+.ar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:600;padding:2px 9px;border-radius:10px;background:color-mix(in srgb,var(--acc) 17%,transparent);color:var(--acc-t)}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px;background:var(--acc)}
+.bar.thick{height:9px;border-radius:5px}
+.btn{height:56px;border:0;border-radius:16px;font-size:17px;font-weight:600;transition:transform .15s,opacity .2s}
+.btn:active:not(:disabled){transform:scale(.98)}
+.btn.pri{background:var(--acc);color:#fff}
+.btn.sec{background:var(--glass2);border:1px solid var(--gb)}
+.btn.dng{background:var(--warn);color:var(--onwarn)}
+.btn:disabled{opacity:.42}
+.btn.go{height:44px;padding:0 16px;font-size:15px;flex:none}
+
+/* progressi */
+.segs{display:flex;gap:2px;padding:3px;border-radius:14px}
+.sg{flex:1;min-height:36px;padding:4px 6px;border:0;border-radius:11px;background:transparent;font-size:13.5px;line-height:1.15}
+.sg.on{background:var(--glass3);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.bigrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.num{font-size:54px;letter-spacing:-.02em;line-height:1}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:12px;font-size:14px;font-weight:600}
+.pill.ok{background:var(--okbg);color:var(--ok)}.pill.warn{background:var(--warnbg);color:var(--warn)}
+.ax{display:flex;justify-content:space-between;font-size:12px}
+.vuoto{padding:22px 4px;font-size:15px;line-height:1.4}
+.rws{display:flex;flex-direction:column;gap:2px}
+.rw{display:flex;align-items:center;gap:12px;min-height:42px}
+.rn{width:84px;font-size:15px;flex:none}
+.rw .bar{flex:1}
+.rv{min-width:74px;text-align:right;font-size:15px;display:flex;align-items:center;justify-content:flex-end;gap:3px}
+.rv small{font-size:12px}
+.rv.okc{color:var(--ok)}.rv.warnc{color:var(--warn)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile{padding:14px 8px;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.tile b{font-size:30px;font-weight:500;line-height:1.1}
+.tiles.in .tile{background:var(--glass2);border-radius:18px}
+
+/* obiettivi */
+.strow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px}
+.card .strow+.strow{border-top:1px solid var(--line)}
+.stp2{display:flex;align-items:center;gap:6px}
+.rb{width:44px;height:44px;border-radius:22px;border:0;background:var(--line);display:flex;align-items:center;justify-content:center}
+.rb:active{transform:scale(.94)}
+.sv{min-width:38px;text-align:center;font-size:24px}
+.week{display:flex;justify-content:space-between;margin:6px 0 2px}
+.dy{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px}
+.dy i{width:36px;height:36px;border-radius:18px;background:var(--line);display:flex;align-items:center;justify-content:center;color:#fff}
+.dy i.f{background:var(--acc)}.dy i.t{background:transparent;border:2px solid var(--acc)}.dy i.u{opacity:.55}
+.dy .b{font-weight:700}
+.chal{background:var(--glass2);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.tag2{font-size:13px;font-weight:600;color:var(--warn)}
+.lbl{font-size:13px;color:var(--mut);margin:12px 0 2px}
+.sw2{position:relative;width:51px;height:31px;border:0;padding:0;border-radius:16px;background:var(--line);flex:none;transition:background .25s}
+.sw2 i{position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:14px;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:left .25s cubic-bezier(.3,.9,.3,1)}
+.sw2.on{background:var(--acc)}.sw2.on i{left:22px}
+.sws{display:flex;gap:14px;padding:6px 2px}
+.sw{width:40px;height:40px;border-radius:20px;border:0}
+.sw.on{outline:3px solid var(--ink);outline-offset:3px}
+.row{width:100%;display:flex;align-items:center;justify-content:space-between;min-height:52px;background:none;border:0;border-top:1px solid var(--line);text-align:left;padding:0}
+.row:first-of-type{border-top:0}
+.row span{display:flex;align-items:center;gap:12px}
+.row.danger{color:var(--warn)}
+
+/* sessione */
+.shead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 16px 6px 6px;border-radius:28px;min-height:60px}
+.ib{width:48px;height:48px;border-radius:24px;border:0;background:transparent;display:flex;align-items:center;justify-content:center}
+.sm2c{flex:1;display:flex;flex-direction:column;min-width:0}.sm2c b{font-size:16px}
+.tn{font-family:var(--serif);font-size:36px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.01em;min-width:80px;text-align:right}
+.tbar{height:18px;border-radius:9px;background:var(--glass);border:1px solid var(--gb);overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.1);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.tbar.thin{height:7px;border-radius:4px}
+.tfill{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 55%,#fff));box-shadow:0 0 16px color-mix(in srgb,var(--acc) 60%,transparent);transition:width .25s linear}
+.tbar.low .tfill{background:linear-gradient(90deg,#C98A1B,#E8B64D);box-shadow:0 0 16px rgba(232,182,77,.6)}
+.tbar.end .tfill{width:0!important}
+.tlab{min-height:18px;margin-top:-10px}
+.mgr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,340px);margin:0 auto}
+.mc{aspect-ratio:1;background:var(--glass2);border:1px solid var(--gb);border-radius:18px;display:flex;align-items:center;justify-content:center;padding:6px}
+.mc svg{width:100%;height:100%}
+.mc.q{background:none;border:2px dashed var(--acc-t);font-family:var(--serif);font-size:44px;color:var(--acc-t)}
+.sq{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sq span{min-width:54px;height:58px;padding:0 14px;border-radius:16px;background:var(--glass2);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:28px}
+.sq .qm,.an .qm{border:2px dashed var(--acc-t);background:none;color:var(--acc-t)}
+.tg{width:150px;aspect-ratio:1;margin:0 auto;padding:10px;background:var(--glass2);border:1px solid var(--gb);border-radius:22px}
+.tg svg{width:100%;height:100%}
+.an{display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--serif);font-size:30px;text-align:center}
+.an b{font-weight:500}.an i{font-style:normal;color:var(--mut)}.an .eq{color:var(--mut);font-size:24px}
+.an .qm{display:inline-block;min-width:44px;border-radius:12px;padding:0 8px}
+.opts{display:grid;gap:10px}
+.opts.o4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.opts.o2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{position:relative;border-radius:18px;border:2px solid transparent;background:var(--glass2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s,border-color .2s}
+.o4 .opt{aspect-ratio:1;padding:6px}
+.o4 .opt svg{width:100%;height:100%}
+.o2 .opt{min-height:64px;padding:10px 12px;font-size:19px;font-weight:600;line-height:1.15}
+.opts.onum .opt span{font-family:var(--serif);font-size:30px;font-weight:500}
+.opt:active:not(:disabled){transform:scale(.97)}
+.opt.sel{border-color:var(--acc-t);background:color-mix(in srgb,var(--acc) 14%,var(--glass2))}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--warn);background:var(--warnbg)}
+.opt:disabled{color:inherit}
+.mk{position:absolute;top:-8px;right:-6px;width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal}
+.opt.right .mk{background:var(--ok);color:var(--bg)}.opt.wrong .mk{background:var(--warn);color:var(--onwarn)}
+.gf{fill:var(--shp)}.ge{fill:var(--line)}
+.ngr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px);margin:0 auto}
+.ngr span{height:72px;border-radius:18px;background:var(--glass2);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px}
+.ngr .qm{background:none;border:2px dashed var(--acc-t);color:var(--acc-t)}
+.lg{padding:18px 20px;display:flex;flex-direction:column;gap:8px;border-radius:22px}
+.lg p{font-size:17px;line-height:1.4}
+.lg .lq{font-weight:700;margin-top:4px}
+.cod{display:flex;flex-direction:column;gap:10px;align-items:center}
+.cod div{display:flex;align-items:center;gap:12px}
+.cod span{padding:10px 14px;border-radius:14px;background:var(--glass2);border:1px solid var(--gb);font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:22px;letter-spacing:.14em}
+.cod i{font-style:normal;color:var(--mut);font-size:22px}
+.cod .qm{border:2px dashed var(--acc-t);background:none;color:var(--acc-t);min-width:60px;text-align:center}
+.ocod .opt span{font-family:ui-monospace,'SF Mono',Menlo,monospace;letter-spacing:.12em;font-size:18px}
+.prv{font-size:26px;line-height:1.25;text-align:center;padding:10px 6px}
+.opts.o1{grid-template-columns:1fr}
+.o1 .opt{justify-content:flex-start;text-align:left;min-height:56px;padding:12px 16px;font-size:16px;font-weight:500;line-height:1.3}
+.fb{position:relative;height:14px;border-radius:7px;background:var(--line);margin:4px 0}
+.fb i{position:absolute;top:0;bottom:0;border-radius:7px;background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 55%,#fff));box-shadow:0 0 12px color-mix(in srgb,var(--acc) 50%,transparent)}
+.fb b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.5}
+.intro{padding:28px 24px;gap:14px}
+.joke{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.4;padding:14px 16px;border-radius:18px;background:var(--glass2)}
+.expl{font-size:16px;line-height:1.45}
+.info{padding:14px 16px;border-radius:18px;background:color-mix(in srgb,var(--acc) 10%,var(--glass2));border:1px solid color-mix(in srgb,var(--acc) 22%,transparent);display:flex;flex-direction:column;gap:6px}
+.info .ih{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--acc-t)}
+.info p{font-size:15px;line-height:1.45}
+.scrim{position:fixed;inset:0;z-index:30;background:rgba(10,10,24,.3);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.scrim.soft{background:rgba(10,10,24,.14);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+#layer2 .scrim{z-index:40}
+.sheet{position:fixed;z-index:31;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,480px);border-radius:30px 30px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;background:var(--glass3);animation:sheetup .4s cubic-bezier(.2,.9,.3,1)}
+@keyframes sheetup{from{transform:translate(-50%,100%)}to{transform:translate(-50%,0)}}
+.sh-t{display:flex;align-items:center;gap:10px}
+.sheet.min{gap:12px;padding-top:16px}
+.rowb{display:flex;gap:10px}.rowb .btn{flex:1;height:50px;font-size:16px}
+.bd{width:30px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center}
+.bd.ok{background:var(--okbg);color:var(--ok)}.bd.warn{background:var(--warnbg);color:var(--warn)}
+.dlg{position:fixed;z-index:41;left:50%;top:50%;transform:translate(-50%,-50%);width:min(calc(100% - 40px),420px);padding:24px;display:flex;flex-direction:column;gap:14px;background:var(--glass3);animation:pop .28s cubic-bezier(.2,.9,.3,1.1)}
+@keyframes pop{from{opacity:0;transform:translate(-50%,-48%) scale(.96)}}
+.db{font-size:15px;line-height:1.45;display:flex;flex-direction:column;gap:10px}
+.db ol{margin:0;padding-left:20px}.db li{margin:4px 0}
+.db textarea{width:100%;border-radius:12px;padding:10px;border:1px solid var(--line);background:var(--glass2);color:var(--ink);font:inherit;font-size:14px;resize:vertical;-webkit-user-select:text;user-select:text}
+.da{display:flex;gap:10px}.da .btn{flex:1;height:50px;font-size:16px}
+#toast{position:fixed;z-index:50;left:50%;bottom:calc(104px + env(safe-area-inset-bottom));transform:translate(-50%,16px);max-width:min(calc(100% - 40px),420px);padding:12px 18px;border-radius:22px;background:var(--glass3);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid var(--gb);box-shadow:var(--sh);font-size:14px;text-align:center;opacity:0;pointer-events:none;transition:opacity .25s,transform .3s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+body.insess #toast{bottom:calc(24px + env(safe-area-inset-bottom))}
+
+@media (max-height:760px){.scr{gap:16px}.scr.home{padding-top:calc(env(safe-area-inset-top) + 16px)}.big{font-size:40px}.en{height:68px}.card{padding:16px}}
+@media (max-width:360px){.big{font-size:42px}.num{font-size:46px}.rn{width:72px}}
+@media (min-width:700px){.scr{padding-top:60px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .shim{background:none;-webkit-text-fill-color:var(--mut);color:var(--mut)}
+}
+
+/* ====== Tacca ====== */
+.kick{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--mut)}
+.kick i{width:9px;height:9px;border-radius:5px;flex:none}
+.pillrow{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.tc{background:color-mix(in srgb,var(--acc) 9%,var(--glass2));border:1px solid color-mix(in srgb,var(--acc) 22%,transparent);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.tc-h{display:flex;align-items:center;gap:8px;color:var(--acc-t)}.tc-h b{font-size:16px}
+.btn.sm3{height:42px;font-size:15px;padding:0 14px;align-self:flex-start}
+.lnk.left{text-align:left;padding:4px 0;align-self:flex-start}
+.ens .en{height:70px}
+.note2{margin:4px 0 0;padding-left:18px;font-size:14px;line-height:1.4;color:var(--ink)}
+.note2 li{margin:2px 0}
+.warnc2{border-color:color-mix(in srgb,var(--warn) 45%,transparent);background:color-mix(in srgb,var(--warnbg) 70%,var(--glass))}
+.warnt{color:var(--warn)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips.wrap{flex-wrap:wrap;overflow:visible}
+.chip{flex:none;min-height:38px;padding:6px 14px;border-radius:19px;border:1px solid var(--gb);background:var(--glass2);font-size:14px;font-weight:500;color:var(--ink)}
+.chip.sm{min-height:34px;padding:4px 10px;font-size:13px}
+.chip.on{background:var(--acc);color:#fff;border-color:transparent}
+.pcard{flex-direction:row;align-items:center;gap:8px;padding:6px 8px 6px 6px}
+.pcard.sel{border-color:color-mix(in srgb,var(--acc) 55%,transparent)}
+.pmain{flex:1;min-width:0;text-align:left;background:none;border:0;padding:12px;display:flex;flex-direction:column;gap:5px}
+.star{color:var(--mut)}.star.on{color:var(--acc-t)}.star.on svg path{fill:currentColor}
+.sheet.big{max-height:92dvh;overflow-y:auto;border-radius:30px 30px 0 0;padding-top:16px;-webkit-overflow-scrolling:touch}
+.sh-top{display:flex;align-items:center;gap:8px}
+.tit{flex:1;min-width:0;font-size:24px;border:0;background:transparent;color:var(--ink);padding:6px 0;border-bottom:1px solid transparent}
+.tit:not([readonly]){border-bottom-color:var(--line)}
+.tit:focus{outline:none;border-bottom-color:var(--acc)}
+.edge{background:var(--glass2);border:1px solid var(--gb);border-radius:18px;padding:8px}
+.wood{fill:color-mix(in srgb,#B07A45 70%,var(--glass2))}
+.pocket{fill:var(--bg)}
+.tip{fill:color-mix(in srgb,#E9B9A0 85%,transparent);stroke:color-mix(in srgb,#9C5B3E 60%,transparent);stroke-width:1.5}
+.dim{stroke:var(--acc-t);stroke-width:2;fill:none}
+.dimt{font:600 14px var(--sans);fill:var(--acc-t)}
+.gl{font:600 13px var(--sans);fill:var(--acc-t)}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fh{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}.fh b{font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:var(--line)}
+input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 8px rgba(0,0,0,.25);margin-top:-10px}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:14px;background:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.inrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inrow label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mut)}
+.inrow input,#fNote{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--glass2);color:var(--ink);font:inherit;font-size:17px;padding:0 12px}
+#fNote{height:auto;min-height:64px;padding:10px 12px;font-size:15px;resize:vertical;-webkit-user-select:text;user-select:text}
+.calc{display:flex;justify-content:space-between;align-items:baseline;gap:10px;background:var(--glass2);border-radius:16px;padding:12px 14px}
+.calc b{font-size:26px;font-weight:500}
+.pf{display:flex;flex-direction:column;gap:6px;padding:8px 0;border-top:1px solid var(--line)}
+.pf:first-of-type{border-top:0}
+.pf-h{display:flex;align-items:center;gap:8px;font-size:15px}.pf-h span:first-child{flex:1}.pf-h b{font-family:var(--serif);font-size:22px;font-weight:500}
+.dbar{display:flex;align-items:flex-end;gap:6px;height:84px}
+.dbar div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:11px;color:var(--mut)}
+.dbar i{width:100%;max-width:18px;border-radius:5px;background:var(--line)}
+.dbar i.v1{background:#E8B64D}.dbar i.v2{background:#D9822B}.dbar i.v3{background:#B3402A}
+.hs{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.hs:first-of-type{border-top:0}
+.vt{display:flex;gap:3px;flex:none}.vt i{width:10px;height:10px;border-radius:5px;background:var(--line)}
+.vt i.facile{background:#2F9E6E}.vt i.giusta{background:#4B9BD2}.vt i.limite{background:#E3A93B}.vt i.fallita{background:#B3402A}
+.vrow{display:flex;flex-direction:column;gap:4px}
+.prev{background:var(--glass2);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.da.col{flex-direction:column}
+/* timer */
+.tim{--ph:#C98A1B;gap:14px}
+.tim[data-k="hang"]{--ph:var(--acc)}
+.tim[data-k="rest"]{--ph:#2F8F86}
+.tim[data-k="setRest"]{--ph:#4B4FBF}
+.ftag{font-size:12px;font-weight:600;color:var(--mut);min-width:40px;text-align:right}
+.ring-w{position:relative;width:min(78vw,300px);aspect-ratio:1;margin:4px auto 0;border:0;background:none;padding:0;color:inherit}
+.ring-w svg{width:100%;height:100%}
+.rbg{fill:none;stroke:var(--line);stroke-width:14}
+.rfg{fill:none;stroke:var(--ph);stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset .12s linear,stroke .3s;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--ph) 55%,transparent))}
+.ring-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ph{font-size:18px;font-weight:700;color:var(--ph);letter-spacing:.01em}
+.dg{font-size:86px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.sd{font-size:15px;color:var(--mut);min-height:20px}
+.tim .tfill{background:linear-gradient(90deg,var(--ph),color-mix(in srgb,var(--ph) 55%,#fff));box-shadow:0 0 16px color-mix(in srgb,var(--ph) 60%,transparent);transition:width .12s linear}
+.nx{text-align:center;font-size:15px;min-height:20px}
+.ctl{display:flex;align-items:center;justify-content:center;gap:22px}
+.cs{width:58px;height:58px;border-radius:29px;border:1px solid var(--gb);background:var(--glass2);display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.cb{width:84px;height:84px;border-radius:42px;border:0;background:var(--ph);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px color-mix(in srgb,var(--ph) 45%,transparent);transition:background .3s}
+.ctr{text-align:center}
+.rate{padding:14px 16px;gap:10px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rgrid .chip{width:100%}
+.sg .n{display:block;font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.1}.sg small{display:block;font-size:12px;color:var(--mut)}.sg.on small{color:var(--ink)}
+
+.rul{display:flex;flex-direction:column;gap:2px}
+.rul b{font-size:34px;font-weight:500}.rul small{font-size:15px;color:var(--mut);font-family:var(--sans)}
+.trk{fill:var(--line)}.fil{fill:var(--acc)}.knob{fill:#fff;stroke:var(--acc);stroke-width:3}
+.tk{stroke:var(--mut);stroke-width:1.2}.tkt{font:12px var(--sans);fill:var(--mut)}
+.sumg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sumg div{background:var(--glass2);border-radius:16px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.sumg b{font-size:22px;font-weight:500;line-height:1.1}.sumg span{font-size:12px;color:var(--mut)}
+.edit{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.obig{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ob{min-height:56px;padding:10px 12px;border-radius:16px;border:1px solid var(--gb);background:var(--glass2);font-size:16px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2}
+.ob.on{background:var(--acc);color:#fff;border-color:transparent}
+.ob.wide{width:100%}
+.det{border-radius:16px;background:var(--glass2);padding:12px 14px}
+.det summary{cursor:pointer;font-weight:600;font-size:15px}
+.det[open]{display:flex;flex-direction:column;gap:10px}
+.wk{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line)}
+.wk-h{display:flex;justify-content:space-between;align-items:baseline}
+.wk-r{display:flex;flex-direction:column;gap:1px;padding:6px 0}
+.wk-r span:first-child{display:flex;align-items:center;gap:6px;font-weight:500}
+.wk-r.cur span:first-child{color:var(--acc-t);font-weight:700}
+
+.sheet.big>*{flex-shrink:0}
+
+</style>
+</head>
+<body>
+<div id="bg" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+<main id="app"></main>
+<nav id="dock" class="dock" aria-label="Menu principale"></nav>
+<div id="layer"></div>
+<div id="layer2"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+/* ====== Utilità ====== */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const r05 = x => Math.round(x * 2) / 2;
+const fmtN = (x, d = 1) => (Math.round(x * 10 ** d) / 10 ** d).toString().replace('.', ',');
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+function fmtDur(s) { s = Math.round(s); if (s < 60) return s + ' s'; const m = Math.floor(s / 60), r = s % 60; return r ? `${m} min ${r} s` : `${m} min`; }
+function fmtClock(s) { s = Math.max(0, Math.ceil(s)); const m = Math.floor(s / 60), r = s % 60; return m ? m + ':' + String(r).padStart(2, '0') : String(r); }
+function fmtLoad(l) { l = +l || 0; if (!l) return 'Peso corporeo'; return l > 0 ? `+${fmtN(l)} kg` : `−${fmtN(Math.abs(l))} kg`; }
+function dayKey(d = new Date()) { d = new Date(d); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+/* ====== Protocolli (gli stessi della versione precedente) ====== */
+const CATS = {
+  riscaldamento: { label: 'Riscaldamento', c: '#C98A1B' },
+  forza: { label: 'Forza massima', c: '#D2461F' },
+  potenza: { label: 'Forza-resistenza', c: '#A23B5B' },
+  resistenza: { label: 'Resistenza', c: '#2F7F78' },
+  custom: { label: 'Mio', c: '#4B4FBF' }
+};
+const GRIPS = ['Semi-arcuata', 'Aperta 4 dita', 'Aperta 3 dita', 'Arcuata', 'Mezza arcuata 2 dita', 'Pinza'];
+const ARCUATE = ['Semi-arcuata', 'Arcuata', 'Mezza arcuata 2 dita'];
+const STD = [
+  { id: 's-warm', name: 'Riscaldamento progressivo', cat: 'riscaldamento', mm: 25, grip: 'Aperta 4 dita', hang: 10, rest: 20, reps: 6, sets: 2, setRest: 60, load: 0, oneArm: false,
+    desc: 'Sospensioni brevi a intensità crescente per preparare dita e tendini.', tip: 'Le prime ripetizioni con i piedi a terra o con scarico, poi sali gradualmente fino al peso corporeo.' },
+  { id: 's-maw', name: 'Max Hangs (MAW)', cat: 'forza', mm: 20, grip: 'Semi-arcuata', hang: 10, rest: 0, reps: 1, sets: 5, setRest: 180, load: 10, oneArm: false,
+    desc: 'Metodo Eva López a carico aggiunto: tacca fissa, si aumenta il peso. Classico per la forza massima delle dita.', tip: 'Lavora intorno all’85–95% del tuo massimale: devi finire ogni sospensione con 2–3 s di margine.' },
+  { id: 's-med', name: 'Min Edge (MED)', cat: 'forza', mm: 12, grip: 'Semi-arcuata', hang: 10, rest: 0, reps: 1, sets: 5, setRest: 180, load: 0, oneArm: false,
+    desc: 'Metodo Eva López a tacca minima: peso corporeo, si riduce la profondità della tacca.', tip: 'Scegli la tacca più piccola che tieni circa 12–13 s, così i 10 s restano puliti.' },
+  { id: 's-753', name: 'Max Hangs 7:53', cat: 'forza', mm: 20, grip: 'Semi-arcuata', hang: 7, rest: 53, reps: 3, sets: 3, setRest: 180, load: 12, oneArm: false,
+    desc: 'Ogni minuto parte una sospensione da 7 s; 53 s di pausa tra una e l’altra.', tip: 'Carico vicino al massimo: ogni ripetizione deve essere esplosiva e senza cedimenti di presa.' },
+  { id: 's-oa', name: 'Sospensioni a un braccio', cat: 'forza', mm: 20, grip: 'Semi-arcuata', hang: 10, rest: 30, reps: 2, sets: 3, setRest: 180, load: -15, oneArm: true,
+    desc: 'Alternanza sinistra e destra, con scarico tramite carrucola o elastico.', tip: 'Spalla attiva, braccio quasi teso. Usa lo scarico in negativo nel campo carico.' },
+  { id: 's-73', name: 'Repeaters 7/3', cat: 'potenza', mm: 20, grip: 'Semi-arcuata', hang: 7, rest: 3, reps: 6, sets: 6, setRest: 180, load: 0, oneArm: false,
+    desc: 'Sei sospensioni da 7 s con 3 s di pausa: il classico per la forza-resistenza.', tip: 'Se cedi prima della sesta ripetizione nelle prime serie, scarica un po’ di peso.' },
+  { id: 's-ih', name: 'IntHangs 10/5', cat: 'potenza', mm: 20, grip: 'Semi-arcuata', hang: 10, rest: 5, reps: 5, sets: 4, setRest: 60, load: 0, oneArm: false,
+    desc: 'Intermittenti Eva López: sospensioni da 10 s con 5 s di pausa, recupero breve tra le serie.', tip: 'Intensità sub-massimale: l’ultima ripetizione dell’ultima serie deve essere dura ma pulita.' },
+  { id: 's-dens', name: 'Density Hangs', cat: 'resistenza', mm: 20, grip: 'Semi-arcuata', hang: 30, rest: 0, reps: 1, sets: 4, setRest: 120, load: 0, oneArm: false,
+    desc: 'Sospensioni lunghe a intensità moderata per stimolare i tessuti connettivi.', tip: 'Scegli un carico che ti permetta 30–40 s. Quando superi i 40 s aggiungi peso.' },
+  { id: 's-lo', name: 'Bassa intensità 10/20', cat: 'resistenza', mm: 20, grip: 'Aperta 4 dita', hang: 10, rest: 20, reps: 10, sets: 3, setRest: 120, load: -20, oneArm: false,
+    desc: 'Volume a bassa intensità, anche quotidiano: tanto tempo sotto tensione senza affaticarti.', tip: 'Resta molto lontano dal cedimento, al 40–60% dello sforzo. Ideale anche come riscaldamento.' },
+  { id: 's-cont', name: 'Resistenza continua 40/20', cat: 'resistenza', mm: 30, grip: 'Aperta 4 dita', hang: 40, rest: 20, reps: 6, sets: 3, setRest: 180, load: 0, oneArm: false,
+    desc: 'Su tacca ampia, sospensioni lunghe per la resistenza aerobica dell’avambraccio.', tip: 'Usa tacche comode o svasi e lavora a un ritmo che puoi mantenere fino in fondo.' },
+  { id: 's-test', name: 'Test massimale 10 s', cat: 'forza', mm: 20, grip: 'Semi-arcuata', hang: 10, rest: 0, reps: 1, sets: 4, setRest: 180, load: 15, oneArm: false, hidden: true,
+    desc: 'Tentativi singoli per trovare il massimale.', tip: 'Aumenta il carico a ogni tentativo che riesci a tenere 10 s.' }
+];
+const EDGE_PRESETS = [6, 8, 10, 12, 15, 18, 20, 25, 30, 35];
+
+/* ====== Stato: stessa chiave della versione precedente, con campi nuovi ====== */
+const LS_KEY = 'tacca.v1';
+const defSettings = () => ({ bw: 70, prep: 5, voice: true, beep: true, vib: true, vol: .7, theme: 'auto', suoni: 'entrambi', meta: true, schermo: true, risc: true, pillole: true });
+const defState = () => ({ settings: defSettings(), custom: [], favs: [], history: [], max: null, updatedAt: 0, prog: {}, dita: [], scelta: 's-maw', oggi: { energia: 'media', dita: 0, ieri: 'no' }, pv: [] });
+function mergeState(o) {
+  const d = defState();
+  const s = Object.assign(d, o || {});
+  s.settings = Object.assign(defSettings(), (o && o.settings) || {});
+  s.oggi = Object.assign(defState().oggi, (o && o.oggi) || {});
+  for (const k of ['custom', 'favs', 'history', 'dita', 'pv']) if (!Array.isArray(s[k])) s[k] = [];
+  if (!s.prog || typeof s.prog !== 'object') s.prog = {};
+  return s;
+}
+let S = defState();
+function loadLocal() { try { const raw = localStorage.getItem(LS_KEY); if (raw) S = mergeState(JSON.parse(raw)); } catch (e) { } }
+let dbRef = null, dbTimer = null;
+function save() {
+  S.updatedAt = Date.now();
+  if (S.history.length > 1500) S.history = S.history.slice(-1500);
+  if (S.dita.length > 400) S.dita = S.dita.slice(-400);
+  try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) { }
+  if (dbRef) { clearTimeout(dbTimer); dbTimer = setTimeout(() => { dbRef.set(JSON.parse(JSON.stringify(S))).then(() => setSync('Sincronizzato con il tuo account')).catch(() => setSync('Salvato solo su questo dispositivo')); }, 1200); }
+}
+let syncTxt = 'Salvato su questo dispositivo';
+function setSync(t) { syncTxt = t; const el = $('#syncTxt'); if (el) el.textContent = t; }
+async function initCloud() {
+  if (!window.claude || typeof window.claude.use !== 'function') return;
+  try {
+    const [d, u] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    if (!d || !u) return;
+    const uid = await u.id(); if (!uid) return;
+    dbRef = d.doc('data/users/' + uid + '/hangboard');
+    const snap = await dbRef.get();
+    if (snap.exists) {
+      const o = snap.data();
+      if ((o.updatedAt || 0) > (S.updatedAt || 0)) { S = mergeState(o); try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) { } if (!sess) render(); }
+      else if (S.updatedAt) dbRef.set(JSON.parse(JSON.stringify(S))).catch(() => { });
+    } else if (S.updatedAt) dbRef.set(JSON.parse(JSON.stringify(S))).catch(() => { });
+    setSync('Sincronizzato con il tuo account');
+  } catch (e) { dbRef = null; }
+}
+
+/* ====== Accesso ai protocolli ====== */
+const allProtocols = () => [...STD.filter(p => !p.hidden), ...S.custom];
+const getP = id => S.custom.find(p => p.id === id) || STD.find(p => p.id === id);
+const isStd = id => String(id).startsWith('s-');
+const catOf = p => CATS[p.cat] || CATS.custom;
+/* applica l'ultima progressione accettata */
+function conProgressione(p) {
+  const g = S.prog[p.id]; if (!g) return { ...p };
+  const q = { ...p };
+  if (g.load != null) q.load = g.load;
+  if (g.reps != null) q.reps = g.reps;
+  if (g.mm != null) q.mm = g.mm;
+  return q;
+}
+function durata(p) {
+  const perRep = p.hang * (p.oneArm ? 2 : 1) + (p.oneArm ? p.rest : 0);
+  const serie = p.reps * perRep + Math.max(0, p.reps - 1) * p.rest;
+  return S.settings.prep + p.sets * serie + Math.max(0, p.sets - 1) * p.setRest;
+}
+
+/* ====== Pillole "Lo sapevi?" ====== */
+const PILLOLE = [
+  // dita, tendini, pulegge
+  'Le dita non hanno muscoli: a muoverle sono i muscoli dell’avambraccio, con lunghi tendini che scorrono dentro le pulegge.',
+  'Ogni dito ha cinque pulegge anulari, da A1 ad A5. In arrampicata la più spesso lesionata è la A2, alla base del dito.',
+  'La lesione di una puleggia è uno degli infortuni più tipici dell’arrampicata, spesso con uno schiocco in presa arcuata. Se lo senti, fermati e fatti visitare.',
+  'La presa arcuata carica le pulegge molto più di quella aperta. Per questo, con le dita doloranti, l’app passa alla presa aperta.',
+  'Tendini e pulegge si adattano molto più lentamente dei muscoli: i muscoli rispondono in settimane, i tessuti connettivi in mesi.',
+  'I tessuti connettivi delle dita ricevono poco sangue rispetto ai muscoli: anche per questo recuperano più lentamente.',
+  'Il carico progressivo e ripetuto stimola il collagene dei tendini. Non serve distruggersi: serve costanza.',
+  'Anulare e medio sono le dita che si infortunano più spesso, soprattutto in presa arcuata e su tacche piccole.',
+  'La presa a tre dita aperta lascia fuori il mignolo e di solito è più gentile con le pulegge della presa arcuata.',
+  'Il mignolo è il dito più debole: nelle prese a quattro dita tende a cedere per primo. È normale, non è un tuo difetto.',
+  'La presa è più forte con il polso dritto o appena esteso. Un polso piegato in avanti ti fa perdere forza.',
+  'In presa aperta lavora soprattutto il flessore profondo delle dita; in presa arcuata contribuisce di più anche il flessore superficiale.',
+  'Le dita rigide al mattino, che si sciolgono scaldandosi, sono comuni tra chi scala molto. Se il dolore peggiora o non passa, meglio farle valutare.',
+  'Dolore lungo tutto il dito anche a riposo, magari con gonfiore, può indicare un’infiammazione del tendine. Non è il giorno giusto per la trave.',
+  'Le cisti sulle dita sono frequenti tra chi scala e di solito innocue. Se danno fastidio vanno comunque fatte vedere.',
+  'I lombricali, piccoli muscoli nel palmo, possono strapparsi nelle prese in cui le dita lavorano in modo molto diverso, come i buchi da due dita.',
+  'Ai ragazzi in crescita la trave è sconsigliata: le cartilagini di crescita delle dita sono vulnerabili fino alla fine dello sviluppo.',
+  'Nei giovani climber sono descritte fratture da stress delle cartilagini di crescita, soprattutto con molta presa arcuata.',
+  'Volker Schöffl, medico e climber tedesco, è tra i principali studiosi degli infortuni da arrampicata: molte indicazioni sulle pulegge vengono dai suoi lavori.',
+  'Il taping a H sulla puleggia A2 si usa soprattutto nel rientro dopo un infortunio. Come prevenzione nelle dita sane l’utilità è dubbia.',
+  'Il rientro dopo una lesione di puleggia richiede da settimane a mesi, secondo la gravità. La tabella di marcia giusta la dà uno specialista.',
+  'Dopo un infortunio, le linee guida moderne preferiscono un rientro graduale con carichi controllati al riposo assoluto prolungato. Sempre su indicazione di chi ti segue.',
+  'Il dolore muscolare il giorno dopo è normale. Il dolore puntuale su un dito, no.',
+  'In riabilitazione si usa spesso questa regola: dolore fino a 3 su 10 durante l’esercizio, che il giorno dopo non peggiora, di solito è accettabile. Sopra, si riduce.',
+  'Se una sospensione ti fa male a un dito preciso, fermati subito. Nessuna progressione vale settimane di stop.',
+  'Ascolta i segnali prima del dolore: dita che tirano, calore, sensazione di gonfiore. Sono avvisi gratuiti.',
+  'Le dita sono più vulnerabili a fine sessione, quando sei stanco: la tecnica peggiora e la presa si chiude in arcuata senza che te ne accorga.',
+  'Gli infortuni da sovraccarico arrivano spesso quando aumenti insieme volume, intensità e frequenza. Cambia una cosa alla volta.',
+  // allenamento
+  'Max Hangs: sospensioni brevi, circa 10 s, con carico alto e pause lunghe. Allenano la forza massima con poco volume, quindi poca fatica.',
+  'Eva López ha studiato a lungo i metodi MAW (carico aggiunto) e MED (tacca minima): oggi sono tra i più usati per la forza delle dita.',
+  'Le pause lunghe tra le serie massimali, 2-3 minuti, servono a recuperare quasi del tutto. Allenare la forza da stanchi non allena la forza.',
+  'Repeaters 7/3: sette secondi appesi e tre di pausa. Allenano la capacità di ripetere sforzi intensi, utile sulle vie con prese piccole in sequenza.',
+  'Le sospensioni a bassa intensità, al 40-60% dello sforzo, sono proposte anche per stimolare i tendini con pochi rischi. Le prove sono ancora preliminari.',
+  'Keith Baar, che studia i tendini, ha osservato che brevi sessioni di carico seguite da circa 6 ore di pausa stimolano il collagene più di sessioni lunghe. In arrampicata l’idea è ancora da verificare.',
+  'Allenare le dita e arrampicare duro nello stesso giorno? Meglio prima la trave, da riposato, poi la parete. Oppure in giorni diversi.',
+  'Il riscaldamento delle dita aumenta la forza disponibile e riduce il rischio. Dieci minuti di sospensioni progressive valgono più di mille trazioni.',
+  'Regola d’oro: finisci ogni sospensione massimale con 2-3 secondi di margine. Se arrivi al cedimento, il carico è troppo alto.',
+  'Aumentare il carico del 2-5% alla volta è più sicuro che fare salti grandi: le dita perdonano poco la fretta.',
+  'Le settimane di scarico, con meno volume e intensità, fanno parte dell’allenamento. Spesso il miglioramento si vede proprio dopo.',
+  'Uno schema classico: 3-4 settimane di carico e una di scarico. Non è legge, ma è un buon punto di partenza.',
+  'Il carico aggiunto si mette con una cintura da zavorra; si toglie con una carrucola e un contrappeso. L’app chiama scarico il carico negativo.',
+  'Con una carrucola si possono allenare le sospensioni a un braccio anche senza essere fortissimi: togli peso finché il movimento è pulito.',
+  'Sospensione a un braccio: spalla attiva, braccio quasi teso, niente rotazioni. Se il corpo gira, il carico è troppo alto.',
+  'Spalle attive: scapole leggermente abbassate e strette. Appendersi a spalle mollate carica i legamenti invece dei muscoli.',
+  'Braccia quasi tese, non bloccate: una leggera flessione dei gomiti protegge le articolazioni.',
+  'La forza delle dita si confronta bene in percentuale del peso corporeo: lo stesso carico aggiunto vale molto di più per chi pesa meno.',
+  'Più che i numeri degli altri, conta la tua curva. Confrontati con te stesso di un mese fa.',
+  'Diversi studi trovano che la forza delle dita è tra i fattori più legati al grado massimo in falesia e nel boulder. Ma tecnica e testa contano moltissimo.',
+  'Tacca più piccola non vuol dire allenamento migliore: oltre un certo punto aumenti soprattutto il rischio e il dolore alla pelle.',
+  'La profondità della tacca cambia molto il carico che tieni: pochi millimetri in meno possono valere chili di zavorra.',
+  'Il bordo conta: un raggio arrotondato è più gentile con pelle e pulegge di uno spigolo vivo.',
+  'Il legno è il materiale più gentile con la pelle; la resina fa più attrito ma consuma di più i polpastrelli.',
+  'Gli stessi millimetri non sono uguali su tutte le travi: forma del bordo e inclinazione cambiano tutto. Confrontati sempre sulla stessa tavola.',
+  'Caldo e umidità riducono l’attrito: d’estate la stessa tacca sembra più piccola. Non sei peggiorato, è il meteo.',
+  'Una sessione di trave a settimana di solito basta a mantenere la forza; due o tre la fanno crescere, se il resto dell’allenamento lo permette.',
+  'Le sessioni brevi e regolari battono quelle lunghe e rare. Un quarto d’ora tre volte a settimana fa più di un’ora ogni tanto.',
+  'Il test massimale ha senso ogni 4-8 settimane: se lo fai più spesso, misuri soprattutto la stanchezza.',
+  'Per confrontare due test servono la stessa tacca, la stessa presa, la stessa trave e un orario simile. Altrimenti confronti mele e pere.',
+  'Il momento migliore per un test è dopo un giorno di riposo e con un buon riscaldamento.',
+  'Nei primi mesi di trave i progressi sono rapidi, poi rallentano. È normale: è la fase in cui lavorano soprattutto i tendini.',
+  'Chi arrampica da poco migliora di più arrampicando che con la trave. L’hangboard dà il meglio dopo qualche anno di pratica.',
+  'Molte linee guida suggeriscono uno o due anni di arrampicata regolare prima di iniziare con le sospensioni massimali.',
+  'Una scala di sforzo da 1 a 10 aiuta a dosare: le serie massimali dovrebbero stare intorno a 8-9, mai a 10.',
+  'Il campus board è molto più intenso della trave: aggiunge velocità e impatti. Va inserito con cautela e solo con dita già allenate.',
+  'Il no-hang, tirare una presa da terra con una cinghia e un peso, è un’alternativa alla trave: si dosa al mezzo chilo e non serve appendersi.',
+  'La tacca sollevata da terra (lifting edge) permette di allenare una mano alla volta con grande precisione sul carico.',
+  'Le dita ricordano: dopo uno stop si torna in forma più in fretta di quanto ci voglia a partire da zero.',
+  'Dopo due-tre settimane di stop la forza delle dita cala un po’, ma di solito si recupera in poco tempo.',
+  'L’asimmetria tra le mani è normale. Le sospensioni a un braccio aiutano a vederla, e a ridurla.',
+  'Allenare una sola presa non basta: in parete ti servono tutte. Fai ruotare le prese nelle settimane.',
+  // prese
+  'Mezza arcuata: dita a circa 90° nella seconda articolazione, pollice libero. È la presa più usata nei test di forza.',
+  'Arcuata piena: pollice sopra l’indice. È fortissima ma molto pesante per le pulegge: meglio dosarla.',
+  'Presa aperta: le dita seguono la forma della tacca. Allena bene il flessore profondo ed è più gentile con le pulegge.',
+  'La pinza allena il pollice e i muscoli della mano: utile, ma spesso trascurata.',
+  'Svasi e prese tonde dipendono molto dall’attrito e dalla posizione del corpo: la trave allena le dita, il resto lo fa la parete.',
+  // pelle e magnesite
+  'Di magnesite ne serve poca: troppa crea uno strato che scivola.',
+  'La magnesite liquida, a base di alcol, asciuga bene e fa da base; quella in polvere si usa per i ritocchi.',
+  'La magnesite per l’arrampicata è carbonato di magnesio, la stessa sostanza usata dai ginnasti.',
+  'Pelle sudata? L’attrito crolla. Un ventilatore o una pausa al fresco a volte valgono più di un chilo di zavorra in meno.',
+  'Le creme per la pelle vanno messe a fine giornata, non prima di scalare: la pelle troppo morbida si strappa.',
+  'Limare i calli spessi evita che si strappino a lembi: pelle liscia e uniforme dura di più.',
+  'Le mani fredde perdono sensibilità e forza: scaldale sotto le ascelle o con uno scaldamani prima di appenderti.',
+  'Il freddo irrigidisce i tessuti: d’inverno, in un garage gelido, allunga il riscaldamento.',
+  // recupero, sonno, alimentazione
+  'Durante il sonno profondo il corpo rilascia più ormone della crescita, importante per il recupero dei tessuti.',
+  'Dormire poco riduce forza e coordinazione e fa sembrare tutto più faticoso. A volte la sessione migliore è quella rimandata.',
+  'In un piccolo studio (Shaw e colleghi, 2017), gelatina con vitamina C presa circa un’ora prima del carico ha aumentato i marcatori di sintesi del collagene. Le prove sono ancora limitate.',
+  'Le proteine servono anche ai tessuti: distribuirle nei pasti della giornata aiuta il recupero.',
+  'Anche una lieve disidratazione può ridurre la prestazione. Una borraccia vicino alla trave non fa mai male.',
+  'L’avambraccio ghisato è fatica locale, non acido lattico che avvelena: il lattato, anzi, viene riutilizzato come carburante.',
+  'La ghisa passa prima se scuoti le braccia tenendole sotto il cuore: aiuta il ritorno del sangue.',
+  'Lo stretching dei flessori dopo la sessione va fatto delicato. Non è provato che prevenga gli infortuni, ma molti lo trovano piacevole.',
+  'Allenare gli estensori delle dita, per esempio con un elastico, è consigliato da molti fisioterapisti per riequilibrare l’avambraccio.',
+  'Il gomito del climber nasce spesso da troppo volume aggiunto troppo in fretta. Il rimedio principale è dosare il carico.',
+  'Dopo le dita, le spalle sono tra le zone più infortunate in arrampicata. Le sospensioni a spalle mollate non aiutano.',
+  'La caffeina può migliorare un po’ forza e resistenza, secondo diversi studi. Alle nove di sera però forse no.',
+  'Appendersi a stomaco pieno non è il massimo: meglio un pasto leggero un’ora o due prima.',
+  'Perdere peso per scalare meglio, oltre un certo punto, fa perdere forza e salute. La forza relativa cresce molto meglio aumentando la forza.',
+  'Respira durante la sospensione: trattenere il fiato alza la pressione e non dà forza in più.',
+  // storia e curiosità
+  'Il primo campus board lo costruì Wolfgang Güllich nel 1988, nella palestra «Campus Centre» dell’università di Norimberga. Da lì il nome.',
+  'Güllich usò il campus board per preparare Action Directe, salita nel 1991 e considerata la prima via di 9a al mondo.',
+  'In inglese la trave si chiama hangboard o fingerboard.',
+  'Le travi di legno moderne, come la Beastmaker, sono diventate popolari negli anni 2010 per le prese precise e gentili con la pelle.',
+  'La MoonBoard, nata a Sheffield da un’idea di Ben Moon, è stata la prima board con prese in posizioni fisse uguali in tutto il mondo.',
+  'Sulle system board come Moon, Kilter e Tension lo stesso blocco è identico ovunque: puoi confrontarti con chi è dall’altra parte del pianeta.',
+  'John Gill, ginnasta e matematico, è considerato il padre del boulder moderno e fu tra i primi a usare la magnesite in arrampicata, negli anni ’50.',
+  'La scala V del boulder prende il nome da John «Vermin» Sherman.',
+  'Adam Ondra ha salito Silence nel 2017, in Norvegia: è considerata la prima via di 9c al mondo.',
+  'Lynn Hill nel 1993 salì in libera il Nose di El Capitan, cosa che nessuno aveva fatto prima.',
+  'Il Rock Master di Arco, nato nel 1987, è una delle gare di arrampicata più antiche del mondo.',
+  'L’arrampicata è entrata alle Olimpiadi con i Giochi di Tokyo 2020, disputati nel 2021.',
+  'Negli anni ’80 l’arrampicata sportiva italiana è esplosa in luoghi come Arco e Finale Ligure.',
+  // testa e ironia
+  'Pausa lunga: va bene annoiarsi. La noia è il segnale che stai recuperando davvero.',
+  'Tre minuti di pausa sembrano un’eternità. Ai tuoi tendini sembrano appena sufficienti.',
+  'Guardare il telefono durante le pause è consentito. Durante le sospensioni no: serve testa.',
+  'Il trucco mentale dei forti: ogni sospensione è una sola, non «ancora cinque serie».',
+  'Se oggi va peggio del solito non sei diventato debole: magari hai dormito male, mangiato poco o fa caldo. La forza vera si vede sulle settimane.',
+  'La progressione non è una linea retta: sono scalini, con qualche gradino in discesa.',
+  'Nessuno è diventato forte in una sessione, ma tanti si sono fatti male in una. Pazienza.',
+  'Annota le sensazioni: tra un mese i tuoi dati saranno più affidabili della memoria, che tende ad abbellire.',
+  'Il riscaldamento non è tempo perso: è l’assicurazione più economica che esista.',
+  'La musica giusta aiuta la motivazione. Quella sbagliata ti fa mollare al settimo secondo.',
+  'Un amico che conta i secondi ad alta voce è il timer più motivante. Questo è il secondo.',
+  'La trave non giudica. Al massimo scricchiola.',
+  'Oggi niente record? Va bene: l’obiettivo è tornare la prossima volta con le dita intere.',
+  'La trave in casa ha un grande vantaggio: è sempre lì. Lo svantaggio? È sempre lì.',
+  'I nomi più citati nell’allenamento delle dita basato sulla ricerca sono Eva López, Tyler Nelson e Keith Baar. Nessuno di loro ti obbliga a fare un’altra serie.'
+];
+const FINE_MSG = [
+  'Sessione finita. Le dita ringraziano, i tendini prendono appunti.',
+  'Fatto. Ora un bicchiere d’acqua e qualcosa da mangiare: il recupero comincia adesso.',
+  'Chiuso. La forza non si vede oggi, si vede tra qualche settimana.',
+  'Ben fatto. Hai iniziato e finito: è la parte più difficile.',
+  'Sessione completata. Mani a riposo, magnesite via, testa libera.',
+  'Fine. Se ti senti scarico, è normale; se ti senti carico, lascia stare la parete per oggi.'
+];
+function pillola() {
+  if (!S.settings.pillole) return null;
+  let liberi = PILLOLE.map((_, i) => i).filter(i => !S.pv.includes(i));
+  if (!liberi.length) { S.pv = []; liberi = PILLOLE.map((_, i) => i); }
+  const i = pick(liberi); S.pv.push(i); while (S.pv.length > Math.floor(PILLOLE.length * 0.8)) S.pv.shift();
+  return PILLOLE[i];
+}
+
+/* ====== Adattamento della sessione di oggi ====== */
+const EN_TXT = { bassa: 'Bassa', media: 'Media', alta: 'Alta' };
+const DITA_TXT = ['Niente', 'Lieve', 'Presente', 'Forte'];
+const DITA_LAB = DITA_TXT.map((t, i) => `<b class="n">${i}</b><small>${t}</small>`);
+const IERI_TXT = { no: 'No', poco: 'Poco', tanto: 'Tanto' };
+const r5 = x => Math.max(5, Math.round(x / 5) * 5);
+
+function caricoTotale(p) { return S.settings.bw + (+p.load || 0); }
+function conTotale(p, tot) { p.load = r05(tot - S.settings.bw); return p; }
+
+/* ctx: {energia, dita, ieri, pause?, tempo?, ditaCheck?} → protocollo adattato e note leggibili */
+function adatta(base, ctx) {
+  const p = { ...base }, note = [];
+  const dita = Math.max(ctx.dita || 0, ctx.ditaCheck ?? 0);
+  const scarico = ctx.energia === 'bassa' || ctx.ieri === 'tanto';
+  if (p.cat !== 'riscaldamento') {
+    if (scarico) {
+      if (p.sets > 1) p.sets -= 1;
+      conTotale(p, caricoTotale(p) * 0.9);
+      note.push(ctx.energia === 'bassa' ? 'Energia bassa: una serie in meno e carico −10%.' : 'Ieri hai arrampicato tanto: una serie in meno e carico −10%.');
+    }
+    if (dita === 2) {
+      conTotale(p, caricoTotale(p) * 0.8);
+      if (p.mm < 20) { p.mm = 20; }
+      if (ARCUATE.includes(p.grip)) p.grip = 'Aperta 4 dita';
+      note.push('Dita a 2: carico −20%, tacca di almeno 20 mm e presa aperta.');
+    } else if (dita >= 3) {
+      conTotale(p, caricoTotale(p) * 0.6);
+      p.mm = Math.max(p.mm, 25); p.grip = 'Aperta 4 dita'; p.sets = Math.min(p.sets, 2);
+      note.push('Dita a 3: versione molto leggera, tacca ampia, presa aperta e al massimo 2 serie. Oggi sarebbe meglio riposare.');
+    } else if (dita === 1) note.push('Dita a 1: niente aumenti di carico oggi.');
+  }
+  if (ctx.pause === 'corte' || ctx.pause === 'lunghe') {
+    const f = ctx.pause === 'corte' ? 1.2 : 0.8;
+    if (p.rest >= 10) p.rest = Math.round(p.rest * f);
+    p.setRest = Math.max(30, r5(p.setRest * f));
+    note.push(ctx.pause === 'corte' ? 'Pause un po’ più lunghe (+20%).' : 'Pause un po’ più corte (−20%).');
+  }
+  if (ctx.tempo && ctx.tempo !== 'tutto') {
+    const lim = ctx.tempo * 60 - (ctx.giaFatti || 0);
+    let tolte = 0;
+    while (p.sets > 1 && durata(p) > lim) { p.sets--; tolte++; }
+    if (tolte) note.push(`Con il tempo che hai: ${tolte === 1 ? 'una serie' : tolte + ' serie'} in meno.`);
+  }
+  if (ctx.energia === 'alta' && dita === 0 && !scarico) note.push('Energia alta: a fine sessione la progressione può aumentare il carico.');
+  return { p, note, dita, scarico };
+}
+
+/* ====== Dolore alle dita ====== */
+function registraDita(v, fase) { S.dita.push({ t: Date.now(), v, fase }); }
+function allarmeDita() {
+  // dolore 2 o più in almeno due sessioni distinte degli ultimi 14 giorni
+  const lim = Date.now() - 14 * 864e5;
+  const giorni = new Set(S.dita.filter(d => d.t > lim && d.v >= 2).map(d => dayKey(d.t)));
+  return giorni.size >= 2;
+}
+
+/* ====== Progressione automatica ====== */
+const VOTI = { facile: 'Facile', giusta: 'Giusta', limite: 'Al limite', fallita: 'Non completata' };
+function proponiProgressione(p, ratings, ctx) {
+  const v = ratings.filter(Boolean);
+  if (!v.length || p.cat === 'riscaldamento' || p.id === 's-test' || !p.id || p.id === 'adhoc') return null;
+  const tot = caricoTotale(p), med = p.id === 's-med' || (p.cat === 'forza' && !p.load && p.mm <= 15 && p.id !== 's-oa');
+  if (v.includes('fallita')) {
+    if (med) return { mm: Math.min(35, p.mm + 1), reps: p.reps, load: p.load, txt: `Tacca +1 mm (${p.mm + 1} mm): oggi una serie non è venuta.` };
+    const nl = r05(tot * 0.95 - S.settings.bw);
+    return { load: nl, reps: p.reps, mm: p.mm, txt: `Carico −5% (${fmtLoad(nl)}): oggi una serie non è venuta.` };
+  }
+  const facili = v.filter(x => x === 'facile').length, limite = v.includes('limite');
+  const bloccata = (ctx.dita || 0) >= 1 || (ctx.ditaCheck || 0) >= 1 || ctx.energia === 'bassa' || ctx.ieri === 'tanto';
+  if (limite || facili / v.length < 0.7) return { load: p.load, reps: p.reps, mm: p.mm, txt: 'Resta tutto uguale: il carico di oggi è quello giusto.' };
+  if (bloccata) return { load: p.load, reps: p.reps, mm: p.mm, txt: 'Era facile, ma con dita o energia non al massimo meglio non aumentare. Resta tutto uguale.' };
+  // limite: al massimo +5% di carico totale in 7 giorni
+  const sett = S.history.filter(h => h.pid === p.id && Date.now() - new Date(h.date) < 7 * 864e5);
+  const base7 = sett.length ? Math.min(...sett.map(h => (h.bw || S.settings.bw) + (+h.load || 0))) : tot;
+  if (med) return { mm: Math.max(6, p.mm - 1), reps: p.reps, load: p.load, txt: `Tacca −1 mm (${p.mm - 1} mm): era tutto facile.` };
+  if (p.cat === 'forza') {
+    const passo = clamp(r05(tot * 0.02), 1, 2), nt = tot + passo;
+    if (nt > base7 * 1.05 + 0.01) return { load: p.load, reps: p.reps, mm: p.mm, txt: 'Era facile, ma questa settimana hai già aumentato abbastanza. Resta tutto uguale.' };
+    return { load: r05(nt - S.settings.bw), reps: p.reps, mm: p.mm, txt: `Carico +${fmtN(passo)} kg (${fmtLoad(r05(nt - S.settings.bw))}): era tutto facile.` };
+  }
+  const baseReps = (getP(p.id) || p).reps;
+  if (p.reps < baseReps + 2) return { load: p.load, reps: p.reps + 1, mm: p.mm, txt: `Una ripetizione in più per serie (${p.reps + 1}): era tutto facile.` };
+  const nt = Math.min(tot * 1.05, base7 * 1.05);
+  if (nt <= tot + 0.25) return { load: p.load, reps: p.reps, mm: p.mm, txt: 'Era facile, ma questa settimana hai già aumentato abbastanza. Resta tutto uguale.' };
+  return { load: r05(nt - S.settings.bw), reps: baseReps, mm: p.mm, txt: `Carico +5% (${fmtLoad(r05(nt - S.settings.bw))}) e ripetizioni di nuovo a ${baseReps}.` };
+}
+
+/* ====== Profilo di forza ====== */
+const gruppoPresa = g => g === 'Semi-arcuata' ? 'Mezza arcuata' : g;
+function profiloForza() {
+  const righe = {};
+  const add = (mm, grip, tot, bw, t, fonte) => {
+    const k = mm + '|' + gruppoPresa(grip), r = tot / bw;
+    const x = righe[k] || (righe[k] = { mm, presa: gruppoPresa(grip), punti: [] });
+    x.punti.push({ t, r, tot, fonte });
+  };
+  const F = { facile: 1.08, giusta: 1.04, limite: 1.0 };
+  for (const h of S.history) {
+    if (h.cat !== 'forza' || h.oneArm || h.hang < 7 || h.pid === 'adhoc') continue;
+    if (h.esito && h.esito.includes && h.esito.includes('fallita')) continue;
+    const voti = (h.esito || []).filter(Boolean);
+    const f = voti.length ? Math.min(...voti.map(x => F[x] || 1)) : 1;
+    const f7 = h.hang < 10 ? 0.97 : 1;
+    add(h.mm, h.grip, ((h.bw || S.settings.bw) + (+h.load || 0)) * f * f7, h.bw || S.settings.bw, new Date(h.date).getTime(), 'sessione');
+  }
+  if (S.max && S.max.total) add(S.max.mm || 20, S.max.grip || 'Semi-arcuata', S.max.total, S.max.bw || S.settings.bw, new Date(S.max.date).getTime(), 'test');
+  const lista = Object.values(righe).map(x => {
+    x.punti.sort((a, b) => a.t - b.t);
+    x.best = Math.max(...x.punti.map(p => p.r));
+    x.ultimo = x.punti[x.punti.length - 1].r;
+    x.primo = x.punti[0].r;
+    return x;
+  }).sort((a, b) => a.mm - b.mm || a.presa.localeCompare(b.presa));
+  let debole = null;
+  if (lista.length >= 2) debole = lista.reduce((m, x) => (x.ultimo / refRapporto(x.mm)) < (m.ultimo / refRapporto(m.mm)) ? x : m);
+  return { lista, debole };
+}
+/* per confrontare tacche diverse: una tacca più piccola rende di meno (stima grossolana, circa 2,5% per mm attorno ai 20 mm) */
+const refRapporto = mm => 1 + (mm - 20) * 0.025;
+function rapporto20() {
+  const { lista } = profiloForza();
+  const vicine = lista.filter(x => x.mm >= 15 && x.mm <= 25 && x.presa === 'Mezza arcuata');
+  if (!vicine.length) return null;
+  return Math.max(...vicine.map(x => x.ultimo / refRapporto(x.mm)));
+}
+
+/* ====== Tacca consigliata ====== */
+function taccaConsigliata(p, ditaOggi = 0) {
+  let mm = p.mm, motivo = '';
+  const r = rapporto20();
+  if (p.cat === 'riscaldamento') { mm = Math.max(25, p.mm); motivo = 'Per scaldarsi meglio una tacca ampia e comoda.'; }
+  else if (p.id === 's-med') {
+    mm = r == null ? 15 : r >= 1.6 ? 10 : r >= 1.35 ? 12 : r >= 1.15 ? 15 : 18;
+    motivo = r == null ? 'Parti da 15 mm: la tacca giusta è la più piccola che tieni circa 12-13 s.' : `Con il tuo profilo (circa ${Math.round(r * 100)}% del peso a 20 mm) prova ${mm} mm: la più piccola che tieni circa 12-13 s.`;
+  } else if (p.cat === 'forza') {
+    if (r == null) { mm = 20; motivo = '20 mm è la misura di riferimento per le sospensioni massimali. Fai un test per una indicazione su misura.'; }
+    else if (r >= 1.6) { mm = 15; motivo = `A 20 mm tieni già circa il ${Math.round(r * 100)}% del peso: una tacca più piccola sposta lo stimolo senza zavorre enormi.`; }
+    else if (r < 1.05) { mm = 25; motivo = `A 20 mm tieni circa il ${Math.round(r * 100)}% del peso: una tacca più ampia permette carichi più puliti.`; }
+    else { mm = 20; motivo = `Con circa il ${Math.round(r * 100)}% del peso a 20 mm, la tacca da 20 mm è adatta: si progredisce con il carico.`; }
+  } else if (p.cat === 'potenza') { mm = 20; motivo = 'Per i repeaters una tacca da 20 mm è un buon compromesso tra intensità e volume.'; }
+  else if (p.cat === 'resistenza') { mm = Math.max(20, p.mm); motivo = 'Per la resistenza conta il volume: meglio una tacca comoda, da 20 mm in su.'; }
+  else { mm = p.mm; motivo = 'Protocollo personale: tieni la tacca che hai scelto.'; }
+  if (ditaOggi >= 2) { mm = Math.max(mm + 5, 20); motivo += ' Con fastidio alle dita: 5 mm in più e presa aperta.'; }
+  else if (ditaOggi === 1 && mm < 20) { mm = 20; motivo += ' Con un lieve fastidio, non scendere sotto i 20 mm.'; }
+  return { mm, motivo, diversa: mm !== p.mm };
+}
+
+/* ====== Suoni ====== */
+let AC = null;
+function audioPronto() {
+  try {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+  } catch (e) { AC = null; }
+}
+const vuoleBip = () => S.settings.suoni === 'bip' || S.settings.suoni === 'entrambi';
+const vuoleVoce = () => S.settings.suoni === 'voce' || S.settings.suoni === 'entrambi';
+function tono(freq, dur = 0.12, tipo = 'sine', ritardo = 0, gain = 1) {
+  if (!AC || !vuoleBip()) return;
+  try {
+    const t0 = AC.currentTime + ritardo, o = AC.createOscillator(), g = AC.createGain();
+    o.type = tipo; o.frequency.value = freq;
+    const v = 0.5 * S.settings.vol * gain;
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(Math.max(0.001, v), t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + dur + 0.03);
+  } catch (e) { }
+}
+const SUONO = {
+  conta: n => tono(n === 1 ? 784 : 660, 0.09, 'sine', 0, 0.9),
+  via: () => { tono(988, 0.12, 'triangle'); tono(1319, 0.22, 'triangle', 0.11); },
+  stop: () => { tono(523, 0.14, 'sine'); tono(392, 0.26, 'sine', 0.13); },
+  meta: () => tono(880, 0.06, 'sine', 0, 0.5),
+  fine: () => { [523, 659, 784, 1047].forEach((f, i) => tono(f, 0.18, 'triangle', i * 0.13)); }
+};
+let voceIt = null;
+function trovaVoce() {
+  try { const vs = speechSynthesis.getVoices(); voceIt = vs.find(v => /^it/i.test(v.lang) && /Alice|Federica|Luca|Google/i.test(v.name)) || vs.find(v => /^it/i.test(v.lang)) || null; } catch (e) { }
+}
+if ('speechSynthesis' in window) { trovaVoce(); try { speechSynthesis.onvoiceschanged = trovaVoce; } catch (e) { } }
+function parla(t) {
+  if (!vuoleVoce() || !('speechSynthesis' in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'it-IT'; if (voceIt) u.voice = voceIt; u.rate = 1.05; u.volume = S.settings.vol; speechSynthesis.speak(u); } catch (e) { }
+}
+function vibra(ms) { if (S.settings.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) { } }
+
+/* ====== Schermo sempre acceso ====== */
+let wakeLock = null;
+async function schermoAcceso(on) {
+  if (!S.settings.schermo) on = false;
+  try {
+    if (on && 'wakeLock' in navigator) { if (!wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); } }
+    else if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch (e) { wakeLock = null; }
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && sess && sess.run) schermoAcceso(true); });
+
+/* ====== Icone ====== */
+const ICON = {
+  allena: '<rect x="2.5" y="6" width="19" height="8" rx="3"/><path d="M6.5 10h3M14.5 10h3M8 14v4M16 14v4"/>',
+  protocolli: '<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+  progressi: '<path d="M4 4v16h16"/><path d="M8 15l3.5-4.5 3 2.5L19 7"/>',
+  opzioni: '<circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>', arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>', up: '<path d="M12 19V5M6 11l6-6 6 6"/>', down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+  chev: '<path d="M9 6l6 6-6 6"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/>',
+  star: '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8-4.3-4.1 5.9-.9z"/>',
+  play: '<path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/>', pause: '<path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/>',
+  back: '<path d="M6 5.5v13M18 5.5v13L8.5 12z" fill="currentColor"/>', fwd: '<path d="M18 5.5v13M6 5.5v13L15.5 12z" fill="currentColor"/>',
+  copy: '<rect x="8" y="8" width="11" height="12" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/>', dl: '<path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/>', ul: '<path d="M12 15V4M7 8.5l5-5 5 5M5 19.5h14"/>',
+  hand: '<path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11.5V5a1.5 1.5 0 0 1 3 0v6.5M14 11.5V6a1.5 1.5 0 0 1 3 0v7c0 4-2.5 7-6 7s-5-2-6.5-4.5L3 12.5a1.5 1.5 0 0 1 2.5-1.6L8 13"/>'
+};
+const ic = (n, s = 24, w = 1.9) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+function bat(n) {
+  let b = ''; for (let i = 0; i < n; i++) b += `<rect x="${3.5 + i * 6}" y="3.5" width="5" height="9" rx="1.5" fill="currentColor" stroke="none"/>`;
+  return `<svg width="30" height="18" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x=".75" y=".75" width="22" height="14.5" rx="4"/><path d="M25 5.5v5" stroke-linecap="round" stroke-width="2"/>${b}</svg>`;
+}
+/* righello: profondità della tacca su una scala 0-40 mm */
+function taccaSVG(mm) {
+  const W = 300, x = v => 10 + v / 40 * (W - 20), f = x(clamp(mm, 0, 40));
+  let t = ''; for (let v = 0; v <= 40; v += 5) t += `<line x1="${x(v)}" y1="${v % 10 ? 30 : 26}" x2="${x(v)}" y2="38" class="tk"/>${v % 10 ? '' : `<text x="${x(v)}" y="52" text-anchor="middle" class="tkt">${v}</text>`}`;
+  return `<div class="rul"><b class="serif">${mm}<small> mm</small></b><svg viewBox="0 0 ${W} 56" width="100%" role="img" aria-label="Tacca da ${mm} millimetri"><rect x="10" y="12" width="${W - 20}" height="10" rx="5" class="trk"/><rect x="10" y="12" width="${(f - 10).toFixed(1)}" height="10" rx="5" class="fil"/><circle cx="${f.toFixed(1)}" cy="17" r="8" class="knob"/>${t}</svg></div>`;
+}
+
+/* ====== Viste ====== */
+const ui = { view: 'allena', prev: null, filtro: 'tutti', sheet: null };
+const sezTit = (piccolo, grande) => `<header class="hd"><div class="mut sm">${piccolo}</div><h1 class="serif h1">${grande}</h1></header>`;
+function parametri(p) {
+  const rip = p.reps > 1 ? `${p.hang} s / ${p.rest} s × ${p.reps}` : `${p.hang} s`;
+  return `${p.mm} mm · ${esc(p.grip)} · ${rip} · ${p.sets} ${p.sets === 1 ? 'serie' : 'serie'} · recupero ${fmtDur(p.setRest)} · ${fmtLoad(p.load)}${p.oneArm ? ' · un braccio' : ''}`;
+}
+function protocolloOggi() {
+  if (S.scelta === 'piano' && S.piano) { const it = itemPiano(); if (it) return { ...it.p, piano: true, pianoIdx: it.idx, pianoSett: it.sett }; }
+  if (S.scelta === 'tmp' && S.tmp) return { ...S.tmp };
+  const p = getP(S.scelta) || STD[1];
+  return conProgressione(p);
+}
+function scelte(act, valori, corrente, etichette, extraCls = '') {
+  return `<div class="segs glass ${extraCls}" role="group">${valori.map((v, i) => `<button class="sg${corrente === v ? ' on' : ''}" data-act="${act}" data-v="${v}" aria-pressed="${corrente === v}">${etichette[i]}</button>`).join('')}</div>`;
+}
+
+function vAllena() {
+  const now = new Date();
+  const wd = cap(now.toLocaleDateString('it-IT', { weekday: 'long' })), dm = now.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
+  const base = protocolloOggi(), o = S.oggi;
+  const { p, note } = adatta(base, o);
+  const tc = taccaConsigliata(base, o.dita); if (S.attr) { tc.mm = snap(tc.mm); tc.diversa = tc.mm !== base.mm; }
+  const prog = S.prog[base.id];
+  const risc = S.settings.risc && base.cat !== 'riscaldamento';
+  const warmD = risc ? durata(adatta(getP('s-warm'), o).p) : 0;
+  const passi = [risc ? ['Riscaldamento', Math.round(warmD / 60) + ' min'] : null, risc ? ['Tre domande', '20 s'] : null, [base.name.length > 18 ? 'Protocollo' : base.name, Math.round(durata(p) / 60) + ' min']].filter(Boolean);
+  const en = [['bassa', 1], ['media', 2], ['alta', 3]].map(([k, n]) => `<button class="en${o.energia === k ? ' on' : ''}" data-act="oggi" data-k="energia" data-v="${k}" aria-pressed="${o.energia === k}" aria-label="Energia ${EN_TXT[k].toLowerCase()}">${bat(n)}<b>${EN_TXT[k]}</b></button>`).join('');
+  const avviso = o.dita >= 3 ? `<section class="glass card warnc2"><div class="t17">Oggi le dita dicono di fermarsi</div><p class="sm2">Con dolore forte è meglio riposare. Se vuoi muoverti comunque, l’app ti propone una versione molto leggera. Se il dolore dura, senti un fisioterapista.</p></section>`
+    : allarmeDita() ? `<section class="glass card warnc2"><div class="t17">Il fastidio alle dita si ripete</div><p class="sm2">Negli ultimi 14 giorni hai segnato dolore 2 o più in almeno due sessioni. Vale la pena farlo valutare da un fisioterapista, meglio se esperto di arrampicata.</p></section>` : '';
+  const invito = !S.piano ? `<section class="glass card tc"><div class="tc-h">${ic('check', 18, 2.2)}<b>Vuoi un piano già pronto?</b></div><p class="sm2">Cinque domande e un test breve: l’app sceglie protocolli, tacche e carichi per 4 settimane.</p><button class="btn pri sm3" data-act="wz-start">Iniziamo</button></section>` : '';
+  return `<div class="scr home">
+    <header class="hd big-hd"><div class="mut">${wd}</div><h1 class="serif big">${dm}</h1></header>
+    ${invito}
+    <section class="glass card">
+      <div class="kick"><i style="background:${catOf(base).c}"></i>${base.piano ? `Il tuo piano · settimana ${base.pianoSett} di 4${base.pianoSett === 4 ? ' · scarico' : ''}` : catOf(base).label}</div>
+      <h2 class="serif h3">${esc(base.name)}</h2>
+      <div class="mut sm2">${parametri(base)}</div>
+      ${base.tip && base.piano ? `<p class="sm2">${esc(base.tip)}</p>` : ''}
+      ${prog && !base.piano ? `<div class="pillrow"><span class="pill ok">${ic('up', 14, 2.2)}Dalla progressione</span><span class="sm mut">${esc(prog.txt)}</span></div>` : ''}
+      ${base.piano ? '' : `<div class="tc"><div class="tc-h">${ic('hand', 18)}<b>Tacca consigliata: ${tc.mm} mm</b></div><p class="sm2">${esc(tc.motivo)}</p>
+        ${tc.diversa ? `<button class="btn sec sm3" data-act="usa-tacca" data-mm="${tc.mm}">Usa ${tc.mm} mm oggi</button>` : ''}</div>`}
+      <button class="lnk left" data-act="nav" data-v="${base.piano ? 'piano' : 'protocolli'}">${base.piano ? 'Vedi tutto il piano' : 'Cambia protocollo'}</button>
+    </section>
+    <section class="glass card"><div class="t17">Come stai oggi?</div>
+      <div class="lbl">Energia</div><div class="ens">${en}</div>
+      <div class="lbl">Dita</div>${scelte('oggi-dita', [0, 1, 2, 3], o.dita, DITA_LAB)}
+      <div class="lbl">Ieri hai arrampicato o fatto board?</div>${scelte('oggi-ieri', ['no', 'poco', 'tanto'], o.ieri, ['No', 'Poco', 'Tanto'])}
+    </section>
+    ${avviso}
+    <section class="glass card"><div class="mut sm">Cosa succede, in ordine</div>
+      <div class="stps">${passi.map((b, i) => `<div class="stp"><div class="stl"><i${i === 0 ? ' class="blank"' : ''}></i><b${i === 0 ? ' class="on"' : ''}>${i + 1}</b><i${i === passi.length - 1 ? ' class="blank"' : ''}></i></div><div class="stn">${esc(b[0])}</div><div class="stm">${b[1]}</div></div>`).join('')}</div>
+      ${note.length ? `<ul class="note2">${note.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+    </section>
+    <div class="cta">
+      <div class="slide" id="slide" role="button" tabindex="0" aria-label="Scorri per iniziare l’allenamento">
+        <div class="slt"><span class="shim">${o.dita >= 3 ? 'scorri per la versione leggera' : 'scorri per iniziare'}</span></div>
+        <div class="thumb" id="thumb">${ic('arrow', 22, 2.3)}</div>
+        <svg class="chv" width="30" height="16" viewBox="0 0 30 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l5 5-5 5" opacity=".3"/><path d="M11 3l5 5-5 5" opacity=".55"/><path d="M19 3l5 5-5 5" opacity=".9"/></svg>
+      </div>
+    </div>
+  </div>`;
+}
+
+function vProtocolli() {
+  const f = ui.filtro;
+  const lista = allProtocols().filter(p => f === 'tutti' ? true : f === 'pref' ? S.favs.includes(p.id) : f === 'custom' ? !isStd(p.id) : p.cat === f);
+  const chips = [['tutti', 'Tutti'], ['pref', 'Preferiti'], ['forza', 'Forza'], ['potenza', 'Forza-resistenza'], ['resistenza', 'Resistenza'], ['riscaldamento', 'Riscaldamento'], ['custom', 'Miei']]
+    .map(([k, l]) => `<button class="chip${f === k ? ' on' : ''}" data-act="filtro" data-v="${k}" aria-pressed="${f === k}">${l}</button>`).join('');
+  const card = p => {
+    const q = conProgressione(p), oggi = S.scelta === p.id;
+    return `<article class="glass card pcard${oggi ? ' sel' : ''}">
+      <button class="pmain" data-act="apri" data-id="${p.id}" aria-label="Apri ${esc(p.name)}">
+        <div class="kick"><i style="background:${catOf(p).c}"></i>${catOf(p).label}${oggi ? ' · scelto per oggi' : ''}</div>
+        <div class="serif h4">${esc(p.name)}</div><div class="mut sm">${parametri(q)}</div></button>
+      <button class="ib star${S.favs.includes(p.id) ? ' on' : ''}" data-act="fav" data-id="${p.id}" aria-label="${S.favs.includes(p.id) ? 'Togli dai preferiti' : 'Aggiungi ai preferiti'}" aria-pressed="${S.favs.includes(p.id)}">${ic('star', 22, 1.8)}</button>
+    </article>`;
+  };
+  return `<div class="scr">${sezTit('Scegli o crea', 'Protocolli')}
+    <div class="chips">${chips}</div>
+    <div class="stack">${lista.length ? lista.map(card).join('') : `<div class="glass card vuoto mut">${f === 'pref' ? 'Nessun preferito: apri un protocollo e tocca la stella.' : 'Nessun protocollo qui.'}</div>`}</div>
+    <button class="btn sec" data-act="nuovo">${ic('plus', 18, 2.2)} Crea un protocollo personale</button>
+    <p class="mut sm note">I protocolli standard sono punti di partenza. Le dita si adattano lentamente: con dolore a pulegge o articolazioni, fermati.</p>
+  </div>`;
+}
+
+/* foglio di dettaglio e modifica */
+const CAMPI = [['mm', 'Tacca', 4, 40, 1, 'mm'], ['hang', 'Sospensione', 3, 60, 1, 's'], ['rest', 'Pausa tra ripetizioni', 0, 120, 1, 's'], ['reps', 'Ripetizioni', 1, 20, 1, ''], ['sets', 'Serie', 1, 12, 1, ''], ['setRest', 'Recupero tra serie', 10, 600, 5, 's'], ['load', 'Carico', -40, 60, 0.5, 'kg']];
+function sheetHTML() {
+  const d = ui.sheet.p, std = isStd(d.id || ''), tc = taccaConsigliata(d, S.oggi.dita);
+  const campi = CAMPI.map(([k, l, mn, mx, st, u]) => `<div class="fld"><div class="fh"><span>${l}</span><b id="v-${k}">${k === 'load' ? fmtLoad(d[k]) : k === 'setRest' ? fmtDur(d[k]) : d[k] + (u ? ' ' + u : '')}</b></div>
+    <input type="range" min="${mn}" max="${mx}" step="${st}" value="${d[k]}" data-campo="${k}" aria-label="${l}"></div>`).join('');
+  const prese = GRIPS.map(g => `<button class="chip${d.grip === g ? ' on' : ''}" data-act="presa" data-v="${esc(g)}" aria-pressed="${d.grip === g}">${esc(g)}</button>`).join('');
+  return `<div class="scrim" data-act="chiudi-sheet"></div><div class="sheet glass big" role="dialog" aria-modal="true" aria-labelledby="sh-n">
+    <div class="sh-top"><input class="tit serif" id="sh-n" value="${esc(d.name)}" ${std ? 'readonly' : ''} aria-label="Nome del protocollo"><button class="ib" data-act="chiudi-sheet" aria-label="Chiudi">${ic('x', 22, 2)}</button></div>
+    <div class="kick"><i style="background:${catOf(d).c}"></i>${catOf(d).label}${std ? ' · standard' : ''}</div>
+    ${d.desc ? `<p class="sm2">${esc(d.desc)}</p>` : ''}
+    <div class="sumg"><div><b class="serif">${d.mm}</b><span>mm</span></div><div><b class="serif">${d.hang}</b><span>s appeso</span></div><div><b class="serif">${d.sets}×${d.reps}</b><span>serie × rip</span></div><div><b class="serif">${fmtDur(d.setRest)}</b><span>recupero</span></div></div>
+    <div class="mut sm2">${esc(d.grip)} · ${fmtLoad(d.load)}${d.oneArm ? ' · un braccio' : ''} · <span id="v-dur">${fmtDur(durata(d))}</span></div>
+    ${d.tip ? `<div class="info"><div class="ih">${ic('info', 16, 2)}<span>Consiglio</span></div><p>${esc(d.tip)}</p></div>` : ''}
+    <button class="btn pri" data-act="usa-oggi">Usa oggi</button>
+    ${ui.sheet.edit || !d.id ? `<div class="edit">
+      <div class="edge" id="edgeVis">${taccaSVG(d.mm)}</div>
+      <p class="mut sm">Tacca consigliata: ${S.attr ? snap(tc.mm) : tc.mm} mm. ${esc(tc.motivo)}</p>
+      ${campi}
+      <div class="lbl">Presa</div><div class="chips wrap">${prese}</div>
+      <div class="strow"><div class="t15">Un braccio alla volta</div><button class="sw2${d.oneArm ? ' on' : ''}" role="switch" aria-checked="${d.oneArm}" aria-label="Un braccio alla volta" data-act="unbraccio"><i></i></button></div>
+      <div class="rowb">${std ? '<button class="btn sec" data-act="salva-mio">Salva come mio</button>' : `<button class="btn sec" data-act="salva">${d.id ? 'Salva' : 'Crea'}</button>`}${!std && d.id ? '<button class="btn dng" data-act="elimina">Elimina</button>' : ''}</div>
+      ${std ? '<p class="mut sm">Le modifiche valgono per oggi. Per tenerle, salvalo come tuo.</p>' : ''}</div>`
+      : '<button class="lnk" data-act="sheet-modifica">Modifica i valori (facoltativo)</button>'}
+  </div>`;
+}
+
+function vProgressi() {
+  const { lista, debole } = profiloForza();
+  const sc = r => clamp((r - 0.5) / 1.5, 0, 1) * 100;
+  const righe = lista.map(x => `<div class="pf"><div class="pf-h"><span>${x.mm} mm · ${esc(x.presa)}</span>${debole === x ? '<span class="tag">Punto debole</span>' : ''}<b>${Math.round(x.ultimo * 100)}%</b></div>
+    <div class="bar thick"><i style="width:${sc(x.ultimo).toFixed(0)}%"></i></div>
+    <div class="mut sm">Record ${Math.round(x.best * 100)}% · ${x.punti.length} ${x.punti.length === 1 ? 'misura' : 'misure'}${x.punti.length > 1 ? ` · ${x.ultimo >= x.primo ? '+' : '−'}${Math.abs(Math.round((x.ultimo - x.primo) * 100))} punti dall’inizio` : ''}</div></div>`).join('');
+  const sett = S.history.filter(h => Date.now() - new Date(h.date) < 7 * 864e5);
+  const tut = sett.reduce((s, h) => s + (h.tut || 0), 0);
+  const pts = lista.flatMap(x => x.punti.map(p => ({ t: p.t, v: p.r / refRapporto(x.mm) }))).sort((a, b) => a.t - b.t);
+  const ultime = S.history.slice(-10).reverse();
+  const dita = S.dita.slice(-14);
+  return `<div class="scr">${sezTit('Andamento', 'Progressi')}
+    <section class="glass card"><div class="t17">Profilo di forza</div>
+      ${righe || '<div class="vuoto mut">Fai un test massimale (in Opzioni) o qualche sessione di forza massima: qui comparirà quanto tieni, per tacca e presa, in percentuale del tuo peso.</div>'}
+      <p class="mut sm2">Stima del massimo su 10 s, da test e sessioni di forza (corretta con le tue valutazioni). Il punto debole confronta prese diverse a parità di tacca, in modo approssimativo.</p></section>
+    ${pts.length >= 2 ? `<section class="glass card"><div class="t17">Andamento della forza</div>${grafico(pts)}<div class="ax mut"><span>${new Date(pts[0].t).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}</span><span>${new Date(pts[pts.length - 1].t).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}</span></div><p class="mut sm2">Valori riportati a una tacca da 20 mm, in percentuale del peso.</p></section>` : ''}
+    <section class="tiles"><div class="glass tile"><b class="serif">${sett.length}</b><span class="mut sm">sessioni in 7 giorni</span></div><div class="glass tile"><b class="serif">${Math.round(tut / 60)}</b><span class="mut sm">minuti appeso</span></div><div class="glass tile"><b class="serif">${S.history.length}</b><span class="mut sm">sessioni totali</span></div></section>
+    <section class="glass card"><div class="t17">Dita</div>
+      ${dita.length ? `<div class="dbar">${dita.map(d => `<div><i class="v${d.v}" style="height:${8 + d.v * 18}px"></i><span>${d.v}</span></div>`).join('')}</div><p class="mut sm2">Ultime ${dita.length} valutazioni, da 0 (niente) a 3 (forte).${allarmeDita() ? ' Il fastidio si è ripetuto: vale la pena farlo valutare.' : ''}</p>` : '<div class="vuoto mut">Qui vedrai le valutazioni delle dita che dai prima, durante e dopo le sessioni.</div>'}</section>
+    <section class="glass card"><div class="t17">Ultime sessioni</div>
+      ${ultime.length ? ultime.map(h => `<div class="hs"><div><b>${esc(h.name)}</b><div class="mut sm">${new Date(h.date).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })} · ${h.mm} mm · ${fmtLoad(h.load)} · ${fmtDur(h.tut || 0)} appeso</div></div><div class="vt">${(h.esito || []).map(v => `<i class="${v || 'nd'}" title="${v ? VOTI[v] : 'non valutata'}"></i>`).join('')}</div></div>`).join('') : '<div class="vuoto mut">Ancora nessuna sessione salvata.</div>'}</section>
+  </div>`;
+}
+function grafico(pts) {
+  const W = 322, H = 110, vs = pts.map(p => p.v);
+  let lo = Math.min(...vs), hi = Math.max(...vs); if (hi - lo < 0.1) { lo -= 0.05; hi += 0.05; } const pad = (hi - lo) * 0.15; lo -= pad; hi += pad;
+  const x = i => 6 + (i / (pts.length - 1)) * (W - 12), y = v => H - 10 - ((v - lo) / (hi - lo)) * (H - 26);
+  const d = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Andamento della forza nel tempo" style="overflow:visible"><path d="${d} L${x(pts.length - 1).toFixed(1)},${H} L${x(0)},${H} Z" fill="var(--acc)" fill-opacity=".12"/><path d="${d}" fill="none" stroke="var(--acc)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${x(pts.length - 1).toFixed(1)}" cy="${y(pts[pts.length - 1].v).toFixed(1)}" r="5" fill="var(--bg)" stroke="var(--acc)" stroke-width="3"/><text x="${W}" y="${(y(pts[pts.length - 1].v) - 10).toFixed(1)}" text-anchor="end" class="gl">${Math.round(pts[pts.length - 1].v * 100)}%</text></svg>`;
+}
+
+function stepper(act, val, label, sub = '') {
+  return `<div class="strow"><div><div class="t15">${label}</div>${sub ? `<div class="mut sm">${sub}</div>` : ''}</div><div class="stp2"><button class="rb" data-act="${act}" data-d="-1" aria-label="Meno: ${label}">${ic('minus', 18, 2)}</button><b class="serif sv">${val}</b><button class="rb" data-act="${act}" data-d="1" aria-label="Più: ${label}">${ic('plus', 18, 2)}</button></div></div>`;
+}
+const toggle = (k, label, sub = '') => `<div class="strow"><div><div class="t15">${label}</div>${sub ? `<div class="mut sm">${sub}</div>` : ''}</div><button class="sw2${S.settings[k] ? ' on' : ''}" role="switch" aria-checked="${!!S.settings[k]}" aria-label="${label}" data-act="tg" data-k="${k}"><i></i></button></div>`;
+function vOpzioni() {
+  const st = S.settings, mx = S.max;
+  const pct = ui.calc || 85;
+  const calc = mx && mx.total ? `<div class="fld"><div class="fh"><span>Intensità</span><b>${pct}% del massimale</b></div><input type="range" min="50" max="100" step="1" value="${pct}" data-calc="1" aria-label="Intensità in percentuale del massimale"></div>
+    <div class="calc"><span class="mut sm">Carico da usare su ${mx.mm || 20} mm</span><b class="serif" id="calcOut">${fmtLoad(r05(mx.total * pct / 100 - st.bw))}</b></div>` : '<div class="vuoto mut">Serve un massimale: fai il test guidato o inseriscilo qui sopra.</div>';
+  return `<div class="scr">${sezTit('Come la vuoi', 'Opzioni')}
+    <section class="glass card"><div class="t17">Tu</div>${stepper('bw', fmtN(st.bw) + ' kg', 'Peso corporeo', 'Serve per carichi e percentuali')}${stepper('prep', st.prep + ' s', 'Preparazione', 'Prima della prima sospensione')}</section>
+    <section class="glass card"><div class="t17">Suoni e schermo</div>
+      <div class="lbl">Avvisi</div>${scelte('suoni', ['bip', 'voce', 'entrambi', 'nessuno'], st.suoni, ['Bip', 'Voce', 'Entrambi', 'Nessuno'])}
+      <div class="fld"><div class="fh"><span>Volume</span><b>${Math.round(st.vol * 100)}%</b></div><input type="range" min="0.1" max="1" step="0.05" value="${st.vol}" data-vol="1" aria-label="Volume"></div>
+      <button class="btn sec sm3" data-act="prova-suoni">Prova i suoni</button>
+      ${toggle('meta', 'Avviso a metà sospensione', 'Solo per sospensioni da 10 s in su')}
+      ${toggle('schermo', 'Schermo sempre acceso', 'Durante la sessione, da iOS 16.4')}
+      ${toggle('vib', 'Vibrazione', 'Funziona su Android, non su iPhone')}
+      <p class="mut sm">Con l’interruttore silenzioso attivo, l’iPhone può zittire i bip. La voce di solito resta.</p></section>
+    <section class="glass card"><div class="t17">Allenamento</div>${toggle('risc', 'Riscaldamento automatico', 'Prima di ogni protocollo, con tre domande dopo')}${toggle('pillole', 'Pillole «Lo sapevi?»', 'Nelle pause lunghe e a fine sessione')}
+      <div class="lbl">Tema</div>${scelte('tema', ['auto', 'light', 'dark'], st.theme, ['Automatico', 'Chiaro', 'Scuro'])}</section>
+    <section class="glass card"><div class="t17">Massimale</div>
+      ${mx && mx.total ? `<div class="calc"><span class="mut sm">${new Date(mx.date).toLocaleDateString('it-IT')} · ${mx.mm || 20} mm · ${esc(mx.grip || 'Semi-arcuata')}</span><b class="serif">${fmtN(mx.total)} kg · ${Math.round(mx.total / (mx.bw || st.bw) * 100)}%</b></div>` : '<p class="sm2">Nessun massimale salvato.</p>'}
+      <button class="btn pri" data-act="test">Fai il test guidato</button>
+      <div class="lbl">Oppure inseriscilo a mano</div>
+      <div class="inrow"><label>Carico aggiunto (kg)<input id="mxL" type="number" inputmode="decimal" step="0.5" value="${mx ? fmtN(mx.total - (mx.bw || st.bw)).replace(',', '.') : 0}"></label><label>Tacca (mm)<input id="mxM" type="number" inputmode="numeric" value="${mx ? mx.mm || 20 : 20}"></label></div>
+      <button class="btn sec" data-act="salva-max">Salva massimale</button></section>
+    <section class="glass card"><div class="t17">Calcolatore di carico</div>${calc}</section>
+    <section class="glass card"><div class="t17">Dati</div><div class="mut sm" id="syncTxt">${esc(syncTxt)}</div>
+      <button class="row" data-act="bk-copia"><span>${ic('copy', 20)}<b class="t15">Copia il backup</b></span>${ic('chev', 18)}</button>
+      <button class="row" data-act="bk-file"><span>${ic('dl', 20)}<b class="t15">Salva il backup come file</b></span>${ic('chev', 18)}</button>
+      <button class="row" data-act="bk-importa"><span>${ic('ul', 20)}<b class="t15">Ripristina da un backup</b></span>${ic('chev', 18)}</button>
+      <button class="row danger" data-act="reset"><span>${ic('x', 20)}<b class="t15">Cancella storico e protocolli personali</b></span>${ic('chev', 18)}</button></section>
+  </div>`;
+}
+
+/* ====== Sessione ====== */
+let sess = null, tickId = null, lastT = 0;
+const FASE_TXT = { prep: 'Preparati', hang: 'Appeso', rest: 'Pausa', setRest: 'Recupero' };
+
+function passi(p) {
+  const st = [{ k: 'prep', d: S.settings.prep }];
+  for (let s = 0; s < p.sets; s++) {
+    for (let r = 0; r < p.reps; r++) {
+      if (p.oneArm) { st.push({ k: 'hang', d: p.hang, s, r, side: 'sinistro' }); st.push({ k: 'rest', d: Math.max(p.rest, 5), s, r }); st.push({ k: 'hang', d: p.hang, s, r, side: 'destro' }); }
+      else st.push({ k: 'hang', d: p.hang, s, r });
+      if (r < p.reps - 1 && p.rest > 0) st.push({ k: 'rest', d: p.rest, s, r });
+    }
+    if (s < p.sets - 1) st.push({ k: 'setRest', d: p.setRest, s });
+  }
+  return st;
+}
+function avvia(opt = {}) {
+  if (sess) return;
+  audioPronto();
+  const ctx = { ...S.oggi };
+  registraDita(ctx.dita, 'pre');
+  let base = protocolloOggi();
+  if (opt.test) base = protocolloTest(opt.test);
+  sess = { base, ctx, test: opt.test || false, tut: 0, ratings: [], pill: null, note: [], t0: Date.now(), warmSec: 0 };
+  if (S.settings.risc && base.cat !== 'riscaldamento') { sess.fase = 'warm'; sess.p = adatta(getP('s-warm'), ctx).p; }
+  else iniziaMain();
+  if (sess.fase === 'warm') avviaPassi();
+  ui.view = 'sessione'; render(); schermoAcceso(true);
+}
+function iniziaMain() {
+  const { p, note } = sess.test ? { p: { ...sess.base }, note: [] } : adatta(sess.base, sess.ctx);
+  sess.fase = 'main'; sess.p = p; sess.note = note; sess.ratings = Array(p.sets).fill(null);
+  avviaPassi();
+}
+function avviaPassi() {
+  sess.steps = passi(sess.p); sess.i = 0; sess.elapsed = 0; sess.tot = sess.steps.reduce((s, x) => s + x.d, 0);
+  entra(); sess.run = true; avviaTick();
+}
+function entra() {
+  const st = sess.steps[sess.i];
+  sess.rem = st.d; sess.lastSec = Math.ceil(st.d); sess.meta = false; sess.dieci = false;
+  if (st.k === 'hang') { SUONO.via(); vibra(120); parla(st.side ? `Braccio ${st.side}, via` : 'Via'); }
+  else if (st.k === 'rest') { SUONO.stop(); vibra([60, 40, 60]); if (st.d >= 10) parla(`Pausa, ${st.d} secondi`); }
+  else if (st.k === 'setRest') {
+    SUONO.stop(); vibra([60, 40, 60]);
+    const ult = st.s === sess.p.sets - 2;
+    parla(`Recupero, ${durVoce(st.d)}${ult ? '. Poi l’ultima serie' : ''}`);
+    if (st.d >= 30) sess.pill = pillola();
+  } else if (st.k === 'prep') parla(sess.fase === 'warm' ? 'Riscaldamento. Preparati' : 'Preparati');
+  if (ui.view === 'sessione') { disegnaExtra(); paint(); }
+}
+function mmss(x) { x = Math.max(0, Math.round(x)); return Math.floor(x / 60) + ':' + String(x % 60).padStart(2, '0'); }
+function durVoce(x) { x = Math.round(x); const m = Math.floor(x / 60), r = x % 60; const a = m ? (m === 1 ? 'un minuto' : m + ' minuti') : ''; const b = r ? r + ' secondi' : ''; return [a, b].filter(Boolean).join(' e '); }
+function avviaTick() {
+  fermaTick(); lastT = performance.now();
+  tickId = setInterval(() => {
+    const now = performance.now(), dt = (now - lastT) / 1000; lastT = now;
+    if (!sess || !sess.run || !sess.steps) return;
+    const st = sess.steps[sess.i];
+    sess.rem -= dt; sess.elapsed += dt;
+    const sec = Math.ceil(sess.rem);
+    if (sec !== sess.lastSec) { sess.lastSec = sec; if (sec >= 1 && sec <= 3) SUONO.conta(sec); }
+    if (st.k === 'hang' && st.d >= 10 && S.settings.meta && !sess.meta && sess.rem <= st.d / 2) { sess.meta = true; SUONO.meta(); }
+    if (st.k === 'setRest' && !sess.dieci && sess.rem <= 10 && st.d >= 30) { sess.dieci = true; parla('Dieci secondi'); }
+    if (sess.rem <= 0) {
+      if (st.k === 'hang') sess.tut += st.d;
+      sess.i++;
+      if (sess.i >= sess.steps.length) return fineBlocco();
+      entra();
+    } else paint();
+  }, 100);
+}
+function fermaTick() { if (tickId) clearInterval(tickId); tickId = null; }
+function fineBlocco() {
+  fermaTick(); sess.run = false;
+  if (sess.fase === 'warm') {
+    sess.warmSec = Math.round(sess.elapsed);
+    if (sess.test) { SUONO.fine(); parla('Riscaldamento finito. Ora il test'); iniziaMain(); save(); render(); return; }
+    sess.fase = 'check'; sess.chk = { pause: 'ok', dita: sess.ctx.dita, tempo: 'tutto' }; sess.pill = pillola();
+    SUONO.fine(); parla('Riscaldamento finito. Tre domande veloci');
+  } else {
+    sess.fase = 'end'; sess.ditaPost = sess.ctx.dita; sess.applica = true; sess.pillEnd = pillola(); sess.msgEnd = pick(FINE_MSG);
+    SUONO.fine(); parla('Sessione finita. Ben fatto'); schermoAcceso(false);
+  }
+  save(); render();
+}
+function paint() {
+  if (!sess || !sess.steps) return;
+  const st = sess.steps[sess.i], frac = clamp(sess.rem / st.d, 0, 1), C = 2 * Math.PI * 96;
+  const set = (id, t) => { const e = $(id); if (e && e.textContent !== t) e.textContent = t; };
+  set('#tDg', fmtClock(sess.rem));
+  const ring = $('#ring'); if (ring) ring.style.strokeDashoffset = (C * (1 - frac)).toFixed(1);
+  const f = $('#tfill'); if (f) f.style.width = (frac * 100).toFixed(1) + '%';
+  const root = $('.tim'); if (root && root.dataset.k !== st.k) { root.dataset.k = st.k; set('#tPh', FASE_TXT[st.k]); }
+  set('#tSd', st.side ? `Braccio ${st.side}` : '');
+  const p = sess.p;
+  set('#tPos', st.k === 'prep' ? `${p.sets} ${p.sets === 1 ? 'serie' : 'serie'} da ${p.reps} ${p.reps === 1 ? 'ripetizione' : 'ripetizioni'}` : `Serie ${st.s + 1} di ${p.sets}${p.reps > 1 ? ` · ripetizione ${Math.min(st.r + 1, p.reps)} di ${p.reps}` : ''}`);
+  const nx = sess.steps[sess.i + 1];
+  set('#tNx', nx ? `Poi: ${nx.k === 'hang' ? `sospensione ${nx.d} s${nx.side ? ' ' + nx.side : ''}` : nx.k === 'rest' ? `pausa ${nx.d} s` : `recupero ${fmtDur(nx.d)}`}` : 'Poi: fine');
+  set('#tOv', `${mmss(sess.elapsed)} di ${mmss(sess.tot)}`);
+  const pl = $('#tPlay'); if (pl) { const want = sess.run ? 'pause' : 'play'; if (pl.dataset.s !== want) { pl.dataset.s = want; pl.innerHTML = ic(want, 34); pl.setAttribute('aria-label', sess.run ? 'Pausa' : 'Riprendi'); } }
+}
+/* card sotto il timer: voto della serie appena finita e pillola, solo nei recuperi */
+function disegnaExtra() {
+  const el = $('#tExtra'); if (!el || !sess.steps) return;
+  const st = sess.steps[sess.i];
+  if (st.k === 'setRest' && sess.fase === 'main') {
+    const v = sess.ratings[st.s];
+    el.innerHTML = `<div class="glass card rate"><div class="t15">Com’era la serie ${st.s + 1}?</div><div class="rgrid">${Object.keys(VOTI).map(k => `<button class="chip${v === k ? ' on' : ''}" data-act="voto" data-s="${st.s}" data-v="${k}" aria-pressed="${v === k}">${VOTI[k]}</button>`).join('')}</div></div>${sess.pill ? `<div class="info"><div class="ih">${ic('info', 16, 2)}<span>Lo sapevi?</span></div><p>${esc(sess.pill)}</p></div>` : ''}`;
+  } else if (st.k === 'setRest' && sess.pill) el.innerHTML = `<div class="info"><div class="ih">${ic('info', 16, 2)}<span>Lo sapevi?</span></div><p>${esc(sess.pill)}</p></div>`;
+  else el.innerHTML = '';
+}
+function indietro() {
+  const st = sess.steps[sess.i];
+  if (st.d - sess.rem > 2 || sess.i === 0) { sess.elapsed -= (st.d - sess.rem); sess.rem = st.d; sess.lastSec = Math.ceil(st.d); paint(); return; }
+  sess.i--; const p = sess.steps[sess.i]; if (p.k === 'hang') sess.tut = Math.max(0, sess.tut - p.d); entra();
+}
+function avanti() {
+  const st = sess.steps[sess.i]; sess.elapsed += Math.max(0, sess.rem);
+  if (st.k === 'hang') sess.tut += Math.max(0, st.d - sess.rem);
+  sess.i++; if (sess.i >= sess.steps.length) return fineBlocco(); entra();
+}
+
+/* ====== Viste della sessione ====== */
+function vTimer() {
+  const nome = sess.fase === 'warm' ? 'Riscaldamento' : sess.p.name;
+  return `<div class="scr ses tim" data-k="prep">
+    <div class="shead glass"><button class="ib" data-act="chiudi-sess" aria-label="Interrompi la sessione">${ic('x', 22, 2)}</button>
+      <div class="sm2c"><b>${esc(nome)}</b><span class="mut sm" id="tPos"></span></div><span class="ftag">${sess.fase === 'warm' ? '1 di 3' : sess.test ? 'Test' : (S.settings.risc && sess.base.cat !== 'riscaldamento' ? '3 di 3' : '')}</span></div>
+    <button class="ring-w" data-act="t-play" aria-label="Pausa o riprendi">
+      <svg viewBox="0 0 220 220" aria-hidden="true"><circle class="rbg" cx="110" cy="110" r="96"/><circle class="rfg" id="ring" cx="110" cy="110" r="96" stroke-dasharray="${(2 * Math.PI * 96).toFixed(1)}" transform="rotate(-90 110 110)"/></svg>
+      <div class="ring-in"><div class="ph" id="tPh">Preparati</div><div class="dg serif" id="tDg"></div><div class="sd" id="tSd"></div></div></button>
+    <div class="tbar" id="tbar"><i class="tfill" id="tfill"></i></div>
+    <div class="nx mut" id="tNx"></div>
+    <div class="ctl"><button class="cs" data-act="t-back" aria-label="Indietro">${ic('back', 26)}</button><button class="cb" data-act="t-play" id="tPlay" aria-label="Pausa"></button><button class="cs" data-act="t-fwd" aria-label="Avanti">${ic('fwd', 26)}</button></div>
+    <div class="mut sm ctr" id="tOv"></div>
+    <div id="tExtra" class="stack"></div>
+  </div>`;
+}
+function vCheck() {
+  const c = sess.chk, ctx = { ...sess.ctx, pause: c.pause, ditaCheck: c.dita, tempo: c.tempo === 'tutto' ? 'tutto' : +c.tempo };
+  const { p, note } = adatta(sess.base, ctx);
+  return `<div class="scr mid"><div class="glass card intro">
+    <div class="mut sm">Passo 2 di 3</div><h1 class="serif big2">Riscaldamento fatto</h1>
+    <p class="sm2">Tre domande veloci per sistemare l’allenamento di oggi. Se vuoi, salta pure.</p>
+    <div class="lbl">Le pause del riscaldamento erano…</div>${scelte('ck-pause', ['corte', 'ok', 'lunghe'], c.pause, ['Corte', 'Giuste', 'Lunghe'])}
+    <div class="lbl">Le dita adesso</div>${scelte('ck-dita', [0, 1, 2, 3], c.dita, DITA_LAB)}
+    <div class="lbl">Quanto tempo hai ancora?</div>${scelte('ck-tempo', ['15', '30', '45', 'tutto'], String(c.tempo), ['15 min', '30 min', '45 min', 'Tutto quello che serve'])}
+    <div class="prev"><b>${esc(p.name)}</b><span class="mut sm">${parametri(p)} · circa ${Math.round(durata(p) / 60)} min</span>${note.length ? `<ul class="note2">${note.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}</div>
+    ${sess.pill ? `<div class="info"><div class="ih">${ic('info', 16, 2)}<span>Lo sapevi?</span></div><p>${esc(sess.pill)}</p></div>` : ''}
+    <button class="btn pri" data-act="ck-via">Avvia il protocollo</button>
+  </div></div>`;
+}
+function vFine() {
+  const p = sess.p, isTest = sess.test;
+  const prop = isTest ? null : proponiProgressione(p, sess.ratings, { ...sess.ctx, ditaCheck: sess.chk ? sess.chk.dita : null });
+  sess.prop = prop;
+  const voti = isTest ? '' : `<div class="lbl">Com’erano le serie?</div>${sess.ratings.map((v, s) => `<div class="vrow"><span class="sm">Serie ${s + 1}</span><div class="rgrid">${Object.keys(VOTI).map(k => `<button class="chip sm${v === k ? ' on' : ''}" data-act="voto" data-s="${s}" data-v="${k}" aria-pressed="${v === k}">${VOTI[k]}</button>`).join('')}</div></div>`).join('')}`;
+  const cambia = prop && (prop.load !== p.load || prop.reps !== p.reps || prop.mm !== p.mm);
+  const test = !isTest ? '' : isTest === 'med' ? `<div class="lbl">Tacca più piccola tenuta pulita per 10 s</div>${opz('ts-mm', 'mm', tacche(), sess.tMm ?? p.mm, tacche().map(m => m + ' mm'))}`
+    : isTest === 'tenuta' ? `<div class="inrow"><label>Secondi tenuti<input id="tstS" type="number" inputmode="numeric" value="${Math.min(30, Math.round(sess.tut)) || ''}"></label><label>Tacca (mm)<input id="tstM" type="number" inputmode="numeric" value="${p.mm}"></label></div><p class="mut sm">Se ti sei fermato prima dei 30 s, scrivi quanti ne hai tenuti.</p>`
+      : `<div class="lbl">Carico aggiunto più alto tenuto per 10 s</div><div class="inrow"><label>Carico (kg)<input id="tstL" type="number" inputmode="decimal" step="0.5" value="${String(p.load).replace(',', '.')}"></label><label>Tacca (mm)<input id="tstM" type="number" inputmode="numeric" value="${p.mm}"></label></div><p class="mut sm">Il carico dell’ultimo tentativo pulito. Valore negativo se usavi la carrucola.</p>`;
+  return `<div class="scr mid"><div class="glass card intro">
+    <h1 class="serif big2">${isTest ? 'Test finito' : 'Sessione finita'}</h1>
+    <div class="tiles in"><div class="tile"><b class="serif">${Math.round((Date.now() - sess.t0) / 60000)}</b><span class="mut sm">minuti</span></div><div class="tile"><b class="serif">${mmss(sess.tut)}</b><span class="mut sm">appeso</span></div><div class="tile"><b class="serif">${p.sets}</b><span class="mut sm">serie</span></div></div>
+    ${test}${voti}
+    <div class="lbl">Le dita adesso</div>${scelte('fine-dita', [0, 1, 2, 3], sess.ditaPost, DITA_LAB)}
+    ${sess.ditaPost >= 2 ? '<p class="sm2 warnt">Annotato. Se il fastidio resta domani, salta la trave; se si ripete, senti un fisioterapista.</p>' : ''}
+    ${prop ? `<div class="prev"><div class="t15">Prossima volta</div><span class="sm2">${esc(prop.txt)}</span>${cambia ? `<div class="strow"><span class="t15">Applica la prossima volta</span><button class="sw2${sess.applica ? ' on' : ''}" role="switch" aria-checked="${sess.applica}" aria-label="Applica la progressione" data-act="applica"><i></i></button></div>` : ''}</div>` : ''}
+    <label class="lbl" for="fNote">Note</label><textarea id="fNote" rows="2" placeholder="Sensazioni, pelle, tacca usata…">${esc(sess.noteTxt || '')}</textarea>
+    ${sess.pillEnd ? `<div class="info"><div class="ih">${ic('info', 16, 2)}<span>Lo sapevi?</span></div><p>${esc(sess.pillEnd)}</p></div>` : ''}
+    <p class="joke">${esc(sess.msgEnd)}</p>
+    <button class="btn pri" data-act="salva-sess">Salva</button><button class="lnk" data-act="esci-sess">Esci senza salvare</button>
+  </div></div>`;
+}
+function vSess() { return sess.fase === 'check' ? vCheck() : sess.fase === 'end' ? vFine() : vTimer(); }
+
+function salvaSessione() {
+  const p = sess.p, b = sess.base;
+  const nt = $('#fNote'); sess.noteTxt = nt ? nt.value.trim() : '';
+  if (sess.test) {
+    const mm = parseInt(($('#tstM') || {}).value) || sess.tMm || p.mm, data = new Date().toISOString();
+    if (sess.test === 'max') { const l = parseFloat(($('#tstL') || {}).value) || 0; S.max = { total: r05(S.settings.bw + l), mm, grip: p.grip, bw: S.settings.bw, date: data }; S.test = { tipo: 'max', valore: S.max.total, mm, data }; }
+    else if (sess.test === 'med') S.test = { tipo: 'med', valore: sess.tMm ?? p.mm, mm: sess.tMm ?? p.mm, data };
+    else S.test = { tipo: 'tenuta', valore: clamp(parseInt(($('#tstS') || {}).value) || Math.round(sess.tut) || 10, 1, 60), mm, data };
+  }
+  if (!sess.test || sess.tut > 0) S.history.push({ id: 'h-' + Date.now().toString(36), date: new Date().toISOString(), pid: b.id || 'adhoc', name: p.name, cat: p.cat, mm: p.mm, grip: p.grip, load: p.load, bw: S.settings.bw, hang: p.hang, rest: p.rest, reps: p.reps, sets: p.sets, setRest: p.setRest, oneArm: p.oneArm, tut: Math.round(sess.tut), dur: Math.round((Date.now() - sess.t0) / 1000), esito: sess.ratings, ditaPost: sess.ditaPost, energia: sess.ctx.energia, ieri: sess.ctx.ieri, adattamenti: sess.note, note: sess.noteTxt });
+  registraDita(sess.ditaPost, 'post');
+  const prop = sess.prop;
+  if (b.piano && S.piano && S.piano.items[b.pianoIdx]) {
+    const it = S.piano.items[b.pianoIdx]; it.fatto = true;
+    if (prop && sess.applica && (prop.load !== p.load || prop.reps !== p.reps || prop.mm !== p.mm)) {
+      S.piano.items.forEach((x, i) => { if (i > b.pianoIdx && x.k === it.k && !x.fatto) { x.p.load = r05(x.p.load + (prop.load - p.load)); if (prop.mm !== p.mm) x.p.mm = passoTacca(x.p.mm, prop.mm < p.mm ? -1 : 1); if (prop.reps !== p.reps) x.p.reps = Math.max(1, x.p.reps + (prop.reps - p.reps)); } });
+    }
+  } else if (prop && sess.applica && b.id && !sess.test && (prop.load !== p.load || prop.reps !== p.reps || prop.mm !== p.mm)) {
+    // la progressione parte dai valori di base, non da quelli ridotti di oggi
+    const orig = conProgressione(getP(b.id) || b);
+    const g = { load: orig.load, reps: orig.reps, mm: orig.mm, txt: prop.txt, t: Date.now() };
+    if (prop.load !== p.load) g.load = r05(orig.load + (prop.load - p.load));
+    if (prop.reps !== p.reps) g.reps = prop.reps;
+    if (prop.mm !== p.mm) g.mm = clamp(orig.mm + (prop.mm - p.mm), 4, 40);
+    S.prog[b.id] = g;
+  }
+  if (S.scelta === 'tmp' && S.tmp && S.tmp.giorno !== dayKey()) { S.scelta = S.tmp.id || 's-maw'; S.tmp = null; }
+  const daWizard = sess.test && ui.wiz;
+  save(); chiudiSess();
+  if (daWizard) { ui.wiz.proposta = generaPiano(); ui.wiz.step = 5; ui.view = 'piano'; render(); toast('Test salvato'); }
+  else if (sess === null && S.test && b.id === 's-test' && S.piano && !itemPiano()) { S.piano = generaPiano(); save(); ui.view = 'piano'; render(); toast('Nuovo piano pronto'); }
+  else toast('Sessione salvata');
+}
+function chiudiSess() { fermaTick(); schermoAcceso(false); try { speechSynthesis.cancel(); } catch (e) { } sess = null; ui.view = 'allena'; render(); }
+
+/* ====== Dialoghi e avvisi ====== */
+let dlgAzioni = [];
+function dialog(titolo, corpo, azioni) {
+  dlgAzioni = azioni;
+  $('#layer2').innerHTML = `<div class="scrim" data-act="dx"></div><div class="dlg glass" role="dialog" aria-modal="true" aria-labelledby="dt"><h3 class="serif h3" id="dt">${esc(titolo)}</h3><div class="db">${corpo}</div><div class="da${azioni.length > 2 ? ' col' : ''}">${azioni.map((a, i) => `<button class="btn ${a.pri ? 'pri' : a.danger ? 'dng' : 'sec'}" data-act="da" data-i="${i}">${esc(a.l)}</button>`).join('')}</div></div>`;
+  const f = $('#layer2 .dlg textarea, #layer2 .dlg .btn'); if (f) f.focus();
+}
+function chiudiDialog() { $('#layer2').innerHTML = ''; dlgAzioni = []; }
+let toastT = null;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2400); }
+
+/* ====== Tema e regia ====== */
+function applicaTema() {
+  const r = document.documentElement, t = S.settings.theme;
+  r.dataset.tema = t === 'light' ? 'chiaro' : t === 'dark' ? 'scuro' : 'auto';
+}
+function renderDock() {
+  const v = ui.view, voci = [['allena', 'Allena'], ['piano', 'Piano'], ['progressi', 'Progressi'], ['opzioni', 'Opzioni']];
+  const d = $('#dock'); d.classList.toggle('hide', v === 'sessione');
+  d.innerHTML = voci.map(([k, l]) => `<button class="dk${v === k || (k === 'piano' && v === 'protocolli') ? ' on' : ''}" data-act="nav" data-v="${k}" aria-label="${l}"${v === k ? ' aria-current="page"' : ''}>${ic(k, 24)}<span>${l}</span></button>`).join('');
+}
+function renderSheet() { $('#layer').innerHTML = ui.sheet ? sheetHTML() : ''; }
+function render() {
+  applicaTema();
+  const v = ui.view;
+  const html = v === 'allena' ? vAllena() : v === 'piano' ? vPiano() : v === 'protocolli' ? vProtocolli() : v === 'progressi' ? vProgressi() : v === 'opzioni' ? vOpzioni() : vSess();
+  const app = $('#app'), cambiata = ui.prev !== v || (v === 'sessione' && ui.prevFase !== (sess && sess.fase));
+  app.innerHTML = html;
+  if (cambiata) { window.scrollTo(0, 0); const s = app.firstElementChild; if (s) s.classList.add('enter'); ui.prev = v; ui.prevFase = sess && sess.fase; }
+  document.body.classList.toggle('insess', v === 'sessione');
+  renderDock(); renderSheet();
+  if (v === 'allena') iniziaSlide();
+  if (v === 'sessione' && sess && sess.steps && (sess.fase === 'warm' || sess.fase === 'main')) { disegnaExtra(); paint(); }
+}
+
+/* ====== Scorri per iniziare ====== */
+function iniziaSlide() {
+  const sl = $('#slide'), th = $('#thumb'); if (!sl || !th) return;
+  let drag = false, x0 = 0, dx = 0, moved = 0, max = 1;
+  const setP = p => { th.style.transform = `translateX(${(p * max).toFixed(1)}px)`; sl.style.setProperty('--p', p.toFixed(3)); };
+  th.addEventListener('pointerdown', e => { drag = true; moved = 0; dx = 0; x0 = e.clientX; max = sl.clientWidth - th.clientWidth - 12; try { th.setPointerCapture(e.pointerId); } catch (_) { } sl.classList.add('drag'); audioPronto(); });
+  th.addEventListener('pointermove', e => { if (!drag) return; moved = Math.max(moved, Math.abs(e.clientX - x0)); dx = clamp(e.clientX - x0, 0, max); setP(dx / max); });
+  th.addEventListener('pointerup', () => { if (!drag) return; drag = false; sl.classList.remove('drag'); const p = dx / max; if (p > 0.8) { setP(1); setTimeout(() => avvia(), 140); } else if (moved < 6) avvia(); else setP(0); });
+  th.addEventListener('pointercancel', () => { drag = false; sl.classList.remove('drag'); setP(0); });
+  sl.addEventListener('click', e => { if (!th.contains(e.target)) avvia(); });
+  sl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); avvia(); } });
+}
+
+/* ====== Backup ====== */
+async function copiaTesto(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch (_) {
+    try { const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok; } catch (e) { return false; }
+  }
+}
+async function salvaFile() {
+  const nome = `tacca-backup-${dayKey()}.json`, dati = JSON.stringify(S);
+  try { if (window.claude && window.claude.use) { const dl = await window.claude.use('downloads'); if (dl) { await dl.save({ filename: nome, data: dati }); toast('Backup salvato'); return; } } } catch (e) { }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([dati], { type: 'application/json' })); a.download = nome; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); toast('Backup salvato');
+}
+function importa(txt) {
+  try { const j = JSON.parse(txt); if (!j || !j.settings || !Array.isArray(j.history)) throw 0; S = mergeState(j); save(); render(); toast('Backup ripristinato'); }
+  catch (e) { toast('Questo testo non sembra un backup di Tacca'); }
+}
+
+/* ====== Eventi ====== */
+function draftDa(p) { return JSON.parse(JSON.stringify(p)); }
+function aggiornaSheetLive(k) {
+  const d = ui.sheet.p, lab = $('#v-' + k);
+  if (lab) lab.textContent = k === 'load' ? fmtLoad(d[k]) : k === 'setRest' ? fmtDur(d[k]) : d[k] + ({ mm: ' mm', hang: ' s', rest: ' s' }[k] || '');
+  if (k === 'mm') { const e = $('#edgeVis'); if (e) e.innerHTML = taccaSVG(d.mm); }
+  if (k !== 'name') { /* il riepilogo si aggiorna alla chiusura */ }
+  const du = $('#v-dur'); if (du) du.textContent = fmtDur(durata(d));
+}
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.campo && ui.sheet) { ui.sheet.p[t.dataset.campo] = parseFloat(t.value); aggiornaSheetLive(t.dataset.campo); }
+  else if (t.dataset.vol) { S.settings.vol = parseFloat(t.value); const b = t.closest('.fld').querySelector('b'); if (b) b.textContent = Math.round(S.settings.vol * 100) + '%'; save(); }
+  else if (t.dataset.calc) { ui.calc = +t.value; const b = t.closest('.fld').querySelector('b'); if (b) b.textContent = ui.calc + '% del massimale'; const o = $('#calcOut'); if (o && S.max) o.textContent = fmtLoad(r05(S.max.total * ui.calc / 100 - S.settings.bw)); }
+  else if (t.id === 'sh-n' && ui.sheet) ui.sheet.p.name = t.value;
+  else if (t.id === 'fNote' && sess) sess.noteTxt = t.value;
+});
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const a = t.dataset.act, d = t.dataset;
+  switch (a) {
+    case 'nav': if (!sess) { ui.view = d.v; ui.sheet = null; if (d.v !== 'piano') ui.wiz = null; render(); } break;
+    case 'wz-start': ui.wiz = { step: 0, a: { tacche: [], ...(S.attr || {}) } }; ui.view = 'piano'; render(); break;
+    case 'wz': ui.wiz.a[d.k] = d.v; render(); break;
+    case 'wz-tacca': { const t = ui.wiz.a.tacche || (ui.wiz.a.tacche = []); const m = +d.v, i = t.indexOf(m); if (i >= 0) t.splice(i, 1); else t.push(m); ui.wiz.a.nonso = false; render(); break; }
+    case 'wz-nonso': ui.wiz.a.nonso = !ui.wiz.a.nonso; if (ui.wiz.a.nonso) ui.wiz.a.tacche = []; render(); break;
+    case 'wz-avanti': if (ui.wiz.step === 3) { S.attr = { ...ui.wiz.a, tacche: ui.wiz.a.nonso ? [15, 20, 25, 30] : (ui.wiz.a.tacche || []).slice().sort((a, b) => a - b) }; save(); } ui.wiz.step++; window.scrollTo(0, 0); render(); break;
+    case 'wz-indietro': ui.wiz.step = Math.max(0, ui.wiz.step - 1); render(); break;
+    case 'wz-res': ui.wiz.resMm = +d.v; render(); break;
+    case 'wz-test': avvia({ test: tipoTest() }); break;
+    case 'wz-test-diretto': ui.wiz = { step: 4, a: { ...S.attr } }; ui.view = 'piano'; render(); break;
+    case 'wz-risultato': {
+      const tt = tipoTest(), data = new Date().toISOString(), mm = parseInt(($('#wzM') || {}).value) || snap(20);
+      if (tt === 'max') { const l = parseFloat(($('#wzL') || {}).value); if (isNaN(l)) { toast('Scrivi il carico tenuto'); break; } S.max = { total: r05(S.settings.bw + l), mm, grip: 'Semi-arcuata', bw: S.settings.bw, date: data }; S.test = { tipo: 'max', valore: S.max.total, mm, data }; }
+      else if (tt === 'med') { if (ui.wiz.resMm == null) { toast('Scegli la tacca'); break; } S.test = { tipo: 'med', valore: ui.wiz.resMm, mm: ui.wiz.resMm, data }; }
+      else { const sec = parseInt(($('#wzS') || {}).value); if (!sec) { toast('Scrivi i secondi'); break; } S.test = { tipo: 'tenuta', valore: clamp(sec, 1, 60), mm, data }; }
+      save(); ui.wiz.proposta = generaPiano(); ui.wiz.step = 5; render(); break;
+    }
+    case 'wz-inizia': S.piano = ui.wiz.proposta; S.scelta = 'piano'; S.tmp = null; ui.wiz = null; save(); ui.view = 'allena'; render(); toast('Piano attivo'); break;
+    case 'wz-ricomincia': ui.wiz.step = 0; render(); break;
+    case 'vai-oggi': S.scelta = 'piano'; save(); ui.view = 'allena'; render(); break;
+    case 'ts-mm': sess.tMm = +d.v; sess.noteTxt = ($('#fNote') || {}).value || sess.noteTxt; render(); break;
+    case 'sheet-modifica': ui.sheet.edit = true; renderSheet(); break;
+    case 'oggi': S.oggi[d.k] = d.v; save(); render(); break;
+    case 'oggi-dita': S.oggi.dita = +d.v; save(); render(); break;
+    case 'oggi-ieri': S.oggi.ieri = d.v; save(); render(); break;
+    case 'usa-tacca': { const b = protocolloOggi(); S.tmp = { ...b, mm: +d.mm, giorno: dayKey() }; S.scelta = 'tmp'; save(); render(); toast(`Oggi tacca da ${d.mm} mm`); break; }
+    case 'filtro': ui.filtro = d.v; render(); break;
+    case 'fav': { const i = S.favs.indexOf(d.id); if (i >= 0) S.favs.splice(i, 1); else S.favs.push(d.id); save(); render(); break; }
+    case 'apri': { const p = getP(d.id); ui.sheet = { p: draftDa(conProgressione(p)), orig: d.id }; renderSheet(); break; }
+    case 'nuovo': ui.sheet = { p: { id: null, name: 'Il mio protocollo', cat: 'custom', mm: 20, grip: 'Semi-arcuata', hang: 10, rest: 5, reps: 4, sets: 4, setRest: 120, load: 0, oneArm: false, desc: '', tip: '' }, orig: null }; renderSheet(); break;
+    case 'chiudi-sheet': ui.sheet = null; renderSheet(); break;
+    case 'presa': ui.sheet.p.grip = d.v; renderSheet(); break;
+    case 'unbraccio': ui.sheet.p.oneArm = !ui.sheet.p.oneArm; renderSheet(); break;
+    case 'sheet-tacca': ui.sheet.p.mm = +d.mm; renderSheet(); break;
+    case 'usa-oggi': {
+      const dr = ui.sheet.p, orig = dr.id ? conProgressione(getP(dr.id)) : null;
+      const uguale = orig && JSON.stringify({ ...orig, name: 0 }) === JSON.stringify({ ...dr, name: 0 });
+      if (uguale) { S.scelta = dr.id; S.tmp = null; } else { S.tmp = { ...dr, id: dr.id || 'adhoc', giorno: dayKey() }; S.scelta = 'tmp'; }
+      ui.sheet = null; save(); ui.view = 'allena'; render(); toast('Protocollo scelto per oggi'); break;
+    }
+    case 'salva-mio': { const dr = ui.sheet.p; const n = { ...dr, id: 'c-' + Date.now().toString(36), cat: dr.cat === 'riscaldamento' ? 'riscaldamento' : dr.cat, name: dr.name + ' (mio)' }; S.custom.push(n); ui.sheet = { p: draftDa(n), orig: n.id }; save(); render(); toast('Salvato tra i tuoi'); break; }
+    case 'salva': { const dr = ui.sheet.p; if (!dr.id) { dr.id = 'c-' + Date.now().toString(36); S.custom.push({ ...dr }); } else { const i = S.custom.findIndex(p => p.id === dr.id); if (i >= 0) S.custom[i] = { ...dr }; } delete S.prog[dr.id]; save(); render(); toast('Protocollo salvato'); break; }
+    case 'duplica': { const n = { ...ui.sheet.p, id: 'c-' + Date.now().toString(36), name: ui.sheet.p.name + ' (copia)' }; S.custom.push(n); ui.sheet = { p: draftDa(n), orig: n.id }; save(); render(); toast('Duplicato'); break; }
+    case 'elimina': dialog('Eliminare questo protocollo?', '<p>Le sessioni già salvate restano nello storico.</p>', [{ l: 'Annulla' }, { l: 'Elimina', danger: true, f() { const id = ui.sheet.p.id; S.custom = S.custom.filter(p => p.id !== id); S.favs = S.favs.filter(f => f !== id); delete S.prog[id]; if (S.scelta === id) S.scelta = 's-maw'; ui.sheet = null; save(); render(); toast('Protocollo eliminato'); } }]); break;
+    case 'bw': S.settings.bw = clamp(r05(S.settings.bw + 0.5 * +d.d), 30, 150); save(); render(); break;
+    case 'prep': S.settings.prep = clamp(S.settings.prep + +d.d, 3, 30); save(); render(); break;
+    case 'suoni': S.settings.suoni = d.v; save(); render(); break;
+    case 'tema': S.settings.theme = d.v; save(); render(); break;
+    case 'tg': S.settings[d.k] = !S.settings[d.k]; save(); render(); break;
+    case 'prova-suoni': audioPronto(); [3, 2, 1].forEach((n, i) => setTimeout(() => SUONO.conta(n), i * 1000)); setTimeout(() => { SUONO.via(); parla('Via'); }, 3000); break;
+    case 'test': ui.wiz = { step: 4, a: { ...(S.attr || { esperienza: '1-3', trave: 'poco', zavorra: 'no', scarico: 'no', tacche: [15, 20, 25, 30], obiettivo: 'forza', giorni: '2' }) } }; if (!S.attr) { ui.wiz.step = 0; } ui.view = 'piano'; render(); break;
+    case 'salva-max': { const l = parseFloat($('#mxL').value) || 0, mm = parseInt($('#mxM').value) || 20; S.max = { total: r05(S.settings.bw + l), mm, grip: 'Semi-arcuata', bw: S.settings.bw, date: new Date().toISOString() }; save(); render(); toast('Massimale salvato'); break; }
+    case 'bk-copia': toast((await copiaTesto(JSON.stringify(S))) ? 'Backup copiato negli appunti' : 'Non riesco a copiare: prova «Salva come file»'); break;
+    case 'bk-file': salvaFile(); break;
+    case 'bk-importa': dialog('Ripristina da un backup', '<p>Incolla qui il testo del backup. I dati attuali verranno sostituiti.</p><textarea id="dlgin" rows="5" aria-label="Testo del backup" placeholder="Incolla qui"></textarea>', [{ l: 'Annulla' }, { l: 'Ripristina', pri: true, f(v) { importa(v || ''); } }]); break;
+    case 'reset': dialog('Cancellare i dati?', '<p>Storico, protocolli personali, progressioni e massimale verranno cancellati. Le impostazioni restano. Non si può annullare.</p>', [{ l: 'Annulla' }, { l: 'Cancella', danger: true, f() { const st = S.settings; S = defState(); S.settings = st; save(); render(); toast('Dati cancellati'); } }]); break;
+    case 'da': { const az = dlgAzioni[+d.i], v = ($('#dlgin') || {}).value; chiudiDialog(); if (az && az.f) az.f(v); break; }
+    case 'dx': chiudiDialog(); break;
+    // sessione
+    case 't-play': if (sess && sess.steps && (sess.fase === 'warm' || sess.fase === 'main')) { audioPronto(); sess.run = !sess.run; if (sess.run) { lastT = performance.now(); schermoAcceso(true); } else { try { speechSynthesis.cancel(); } catch (e) { } } paint(); } break;
+    case 't-back': if (sess && sess.steps) indietro(); break;
+    case 't-fwd': if (sess && sess.steps) avanti(); break;
+    case 'voto': if (sess) { sess.ratings[+d.s] = sess.ratings[+d.s] === d.v ? null : d.v; if (sess.fase === 'end') { sess.noteTxt = ($('#fNote') || {}).value || sess.noteTxt; render(); } else disegnaExtra(); } break;
+    case 'ck-pause': sess.chk.pause = d.v; render(); break;
+    case 'ck-dita': sess.chk.dita = +d.v; render(); break;
+    case 'ck-tempo': sess.chk.tempo = d.v === 'tutto' ? 'tutto' : +d.v; render(); break;
+    case 'ck-via': { const c = sess.chk; Object.assign(sess.ctx, { pause: c.pause, ditaCheck: c.dita, tempo: c.tempo }); registraDita(c.dita, 'check'); iniziaMain(); render(); break; }
+    case 'fine-dita': sess.ditaPost = +d.v; sess.noteTxt = ($('#fNote') || {}).value || sess.noteTxt; render(); break;
+    case 'applica': sess.applica = !sess.applica; sess.noteTxt = ($('#fNote') || {}).value || sess.noteTxt; render(); break;
+    case 'salva-sess': salvaSessione(); break;
+    case 'esci-sess': dialog('Uscire senza salvare?', '<p>Questa sessione non finirà nello storico.</p>', [{ l: 'Annulla' }, { l: 'Esci', danger: true, f() { chiudiSess(); } }]); break;
+    case 'chiudi-sess': {
+      const prima = sess.run; sess.run = false; paint();
+      dialog('Interrompere la sessione?', '<p>Puoi salvare quello che hai fatto finora oppure uscire.</p>', [{ l: 'Continua', pri: true, f() { sess.run = prima; lastT = performance.now(); paint(); } }, { l: 'Salva fin qui', f() { fermaTick(); if (sess.fase === 'warm') { chiudiSess(); return; } sess.fase = 'end'; sess.ditaPost = sess.ctx.dita; sess.applica = false; sess.pillEnd = pillola(); sess.msgEnd = pick(FINE_MSG); schermoAcceso(false); render(); } }, { l: 'Esci senza salvare', danger: true, f() { chiudiSess(); } }]);
+      break;
+    }
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if ($('#layer2 .dlg')) chiudiDialog(); else if (ui.sheet) { ui.sheet = null; renderSheet(); } }
+  if (e.key === ' ' && sess && sess.steps && ui.view === 'sessione' && !/INPUT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) { e.preventDefault(); sess.run = !sess.run; lastT = performance.now(); paint(); }
+});
+
+/* ====== Avvio ====== */
+(function init() {
+  loadLocal();
+  if (S.scelta === 'tmp' && (!S.tmp || S.tmp.giorno !== dayKey())) { S.scelta = (S.tmp && S.tmp.id && getP(S.tmp.id)) ? S.tmp.id : (getP(S.scelta) ? S.scelta : 's-maw'); S.tmp = null; }
+  if (!getP(S.scelta) && S.scelta !== 'tmp') S.scelta = 's-maw';
+  render();
+  initCloud();
+  if ('serviceWorker' in navigator && location.protocol === 'https:' && !/claude/.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(() => { });
+})();
+
+/* ====== Attrezzatura, test e piano automatico ====== */
+const ZAV_MAX = { no: 0, '10': 10, '20': 20, piu: 60 };
+function tacche() { const t = (S.attr && S.attr.tacche && S.attr.tacche.length) ? S.attr.tacche : [15, 20, 25, 30]; return t.slice().sort((a, b) => a - b); }
+function snap(mm) { const T = tacche(), ge = T.filter(x => x >= mm); return ge.length ? ge[0] : T[T.length - 1]; }
+function passoTacca(mm, n) { const T = tacche(); let i = T.indexOf(mm); if (i < 0) i = T.indexOf(snap(mm)); return T[clamp(i + n, 0, T.length - 1)]; }
+function tipoTest(a = S.attr) {
+  if (!a) return 'tenuta';
+  if (a.esperienza === '<1' || a.trave === 'mai') return 'tenuta';
+  if (a.zavorra !== 'no' || a.scarico === 'si') return 'max';
+  return 'med';
+}
+const TEST_INFO = {
+  tenuta: { nome: 'Test di tenuta', testo: 'Una sola sospensione a peso corporeo su una tacca ampia, fino a 30 secondi. Fermati appena senti che la presa cede: non serve arrivare al limite.' },
+  max: { nome: 'Test massimale', testo: 'Quattro tentativi da 10 secondi su 20 mm, con 3 minuti di pausa. A ogni tentativo riuscito aggiungi un po’ di peso (o ne togli meno con la carrucola). Alla fine segni il carico più alto tenuto pulito.' },
+  med: { nome: 'Test della tacca minima', testo: 'Quattro tentativi da 10 secondi a peso corporeo, con 3 minuti di pausa, scendendo di tacca quando riesci. Alla fine segni la tacca più piccola tenuta pulita per 10 secondi.' }
+};
+function protocolloTest(tipo) {
+  const base = { id: 's-test', cat: 'forza', grip: 'Semi-arcuata', rest: 0, reps: 1, oneArm: false, hidden: true, desc: '', tip: '' };
+  if (tipo === 'tenuta') return { ...base, name: 'Test di tenuta', grip: 'Aperta 4 dita', mm: snap(25), hang: 30, sets: 1, setRest: 60, load: 0 };
+  if (tipo === 'med') return { ...base, name: 'Test della tacca minima', mm: snap(15), hang: 10, sets: 4, setRest: 180, load: 0 };
+  return { ...base, name: 'Test massimale 10 s', mm: snap(20), hang: 10, sets: 4, setRest: 180, load: S.max && S.max.total ? r05(S.max.total * 0.9 - S.settings.bw) : 0 };
+}
+
+function generaPiano() {
+  const a = S.attr, t = S.test, bw = S.settings.bw, conZav = a.zavorra !== 'no', zavMax = ZAV_MAX[a.zavorra] || 0, conScarico = a.scarico === 'si';
+  const P = o => ({ id: 'piano', cat: 'forza', grip: 'Semi-arcuata', rest: 0, reps: 1, oneArm: false, desc: '', tip: '', ...o });
+  const limita = l => { l = r05(l); if (l > 0 && !conZav) l = 0; if (l > 0 && zavMax) l = Math.min(l, zavMax); if (l < 0 && !conScarico) l = 0; return l; };
+  const scarico20 = conScarico ? -r05(bw * 0.2) : 0;
+  let A, B;
+  if (t.tipo === 'tenuta') {
+    const big = snap(25), tl = clamp(t.valore || 10, 3, 30);
+    A = w => P({ name: 'Bassa intensità', cat: 'resistenza', grip: 'Aperta 4 dita', mm: big, hang: 10, rest: 20, reps: [6, 8, 10, 6][w], sets: [3, 3, 3, 2][w], setRest: 120, load: scarico20, tip: conScarico ? 'Togli circa il 20% del peso con la carrucola: deve essere facile.' : 'Se è troppo, tieni i piedi a terra e scarica il peso che serve: deve essere facile.' });
+    B = w => P({ name: 'Sospensioni di base', cat: 'resistenza', grip: 'Aperta 4 dita', mm: big, hang: clamp(Math.round(tl * [0.5, 0.55, 0.6, 0.45][w]), 5, 20), sets: [4, 5, 5, 3][w], setRest: 90, load: 0, tip: 'Fermati sempre prima di cedere, con qualche secondo di margine.' });
+  } else {
+    let F;
+    if (t.tipo === 'max') {
+      const tot = t.valore, mm = t.mm || snap(20);
+      F = w => { const pct = [0.85, 0.88, 0.91, 0.75][w]; return P({ name: 'Max Hangs', mm, hang: 10, sets: [5, 5, 6, 3][w], setRest: 180, load: limita(tot * pct - bw), tip: `Circa il ${Math.round(pct * 100)}% del tuo massimale. Finisci ogni sospensione con 2-3 s di margine.` }); };
+    } else {
+      const m0 = t.mm || snap(15);
+      F = w => P({ name: 'Min Edge', mm: [passoTacca(m0, 1), passoTacca(m0, 1), m0, passoTacca(m0, 2)][w], hang: 10, sets: [5, 5, 5, 3][w], setRest: 180, load: 0, tip: 'A peso corporeo. Quando i 10 s diventano facili, scendi alla tacca successiva.' });
+    }
+    const maxTot = t.tipo === 'max' ? t.valore : bw;
+    /* senza carrucola non si può togliere peso: si passa a una tacca più ampia */
+    const sub = (nome, o, pcts, w) => {
+      const want = t.tipo === 'max' ? maxTot * pcts[w] - bw : 0;
+      const largo = want < -4 && !conScarico;
+      return P({ ...o, name: nome, mm: largo ? passoTacca(snap(20), 1) : snap(20), load: t.tipo === 'max' ? limita(want) : 0, tip: (largo ? 'Senza carrucola, una tacca più ampia abbassa l’intensità al punto giusto. ' : '') + o.tip });
+    };
+    const Rz = w => sub('IntHangs 10/5', { cat: 'potenza', hang: 10, rest: 5, reps: 5, sets: [3, 4, 4, 2][w], setRest: 90, tip: 'Dura ma pulita: l’ultima ripetizione dell’ultima serie deve restare controllata.' }, [0.6, 0.63, 0.66, 0.55], w);
+    const Rp = w => sub('Repeaters 7/3', { cat: 'potenza', hang: 7, rest: 3, reps: 6, sets: [3, 4, 5, 3][w], setRest: 180, tip: 'Se cedi prima della sesta ripetizione nelle prime serie, togli un po’ di peso.' }, [0.55, 0.58, 0.6, 0.5], w);
+    const Lo = w => P({ name: 'Bassa intensità 10/20', cat: 'resistenza', grip: 'Aperta 4 dita', mm: snap(20), hang: 10, rest: 20, reps: [8, 10, 10, 6][w], sets: 3, setRest: 120, load: scarico20, tip: 'Molto lontano dal cedimento, al 40-60% dello sforzo.' });
+    const ob = a.obiettivo;
+    if (ob === 'resistenza') { A = Rz; B = Rp; }
+    else if (ob === 'entrambi') { A = F; B = Rz; }
+    else if (ob === 'mantenere') { A = w => ({ ...F(w), sets: Math.min(3, F(w).sets) }); B = Lo; }
+    else { A = F; B = Lo; }
+  }
+  const g = +a.giorni || 2, seqK = g === 1 ? ['A'] : g === 2 ? ['A', 'B'] : ['A', 'B', 'A'];
+  const items = [];
+  for (let w = 0; w < 4; w++) for (const k of seqK) items.push({ k, sett: w + 1, p: (k === 'A' ? A : B)(w), fatto: false });
+  return { creato: Date.now(), items, next: 0, testTipo: t.tipo };
+}
+function itemPiano() { const pi = S.piano; if (!pi) return null; const i = pi.items.findIndex(x => !x.fatto); return i < 0 ? null : { ...pi.items[i], idx: i }; }
+
+/* ====== Viste: domande, test, piano ====== */
+const opz = (act, k, vals, cur, labs, multi = false) => `<div class="obig">${vals.map((v, i) => { const on = multi ? (cur || []).includes(v) : String(cur) === String(v); return `<button class="ob${on ? ' on' : ''}" data-act="${act}" data-k="${k}" data-v="${v}" aria-pressed="${on}">${labs[i]}</button>`; }).join('')}</div>`;
+function vWizard() {
+  const w = ui.wiz, a = w.a, n = 5;
+  const testa = (i, tit, sub = '') => `<div class="mut sm">Passo ${i} di ${n}</div><h1 class="serif big2">${tit}</h1>${sub ? `<p class="sm2">${sub}</p>` : ''}`;
+  const nav = (ok = true) => `<div class="rowb">${w.step > 0 ? '<button class="btn sec" data-act="wz-indietro">Indietro</button>' : ''}<button class="btn pri" data-act="wz-avanti" ${ok ? '' : 'disabled'}>Avanti</button></div>`;
+  let body = '';
+  if (w.step === 0) body = `${testa(1, 'Partiamo da te')}
+    <div class="lbl">Da quanto arrampichi?</div>${opz('wz', 'esperienza', ['<1', '1-3', '3+'], a.esperienza, ['Meno di un anno', 'Da 1 a 3 anni', 'Più di 3 anni'])}
+    <div class="lbl">Hai già usato la trave?</div>${opz('wz', 'trave', ['mai', 'poco', 'spesso'], a.trave, ['Mai', 'Ogni tanto', 'Regolarmente'])}${nav(a.esperienza && a.trave)}`;
+  if (w.step === 1) body = `${testa(2, 'Che tacche hai?', 'Tocca tutte quelle che hai sulla trave. Se non lo sai, scegli «Non lo so» e uso misure standard.')}
+    ${opz('wz-tacca', 'tacche', EDGE_PRESETS, a.tacche, EDGE_PRESETS.map(m => m + ' mm'), true)}
+    <button class="ob wide${a.nonso ? ' on' : ''}" data-act="wz-nonso" aria-pressed="${!!a.nonso}">Non lo so</button>${nav((a.tacche && a.tacche.length) || a.nonso)}`;
+  if (w.step === 2) body = `${testa(3, 'Altra attrezzatura')}
+    <div class="lbl">Hai una cintura o uno zaino con i pesi?</div>${opz('wz', 'zavorra', ['no', '10', '20', 'piu'], a.zavorra, ['No', 'Fino a 10 kg', 'Fino a 20 kg', 'Di più'])}
+    <div class="lbl">Hai una carrucola o un elastico per togliere peso?</div>${opz('wz', 'scarico', ['si', 'no'], a.scarico, ['Sì', 'No'])}${nav(a.zavorra && a.scarico)}`;
+  if (w.step === 3) body = `${testa(4, 'Cosa vuoi ottenere?')}
+    <div class="lbl">Obiettivo</div>${opz('wz', 'obiettivo', ['forza', 'resistenza', 'entrambi', 'mantenere'], a.obiettivo, ['Più forza nelle dita', 'Più resistenza', 'Tutte e due', 'Mantenermi'])}
+    <div class="lbl">Quante volte a settimana vuoi usare la trave?</div>${opz('wz', 'giorni', ['1', '2', '3'], a.giorni, ['1 volta', '2 volte', '3 volte'])}${nav(a.obiettivo && a.giorni)}`;
+  if (w.step === 4) {
+    const tt = tipoTest(a), info = TEST_INFO[tt], pr = protocolloTest(tt);
+    const giaFatto = tt === 'max' ? `<div class="inrow"><label>Carico aggiunto tenuto 10 s (kg)<input id="wzL" type="number" inputmode="decimal" step="0.5" placeholder="es. 12"></label><label>Su tacca (mm)<input id="wzM" type="number" inputmode="numeric" value="${snap(20)}"></label></div>`
+      : tt === 'med' ? `<div class="lbl">Tacca più piccola tenuta 10 s</div>${opz('wz-res', 'mm', tacche(), w.resMm, tacche().map(m => m + ' mm'))}`
+        : `<div class="inrow"><label>Secondi tenuti a peso corporeo<input id="wzS" type="number" inputmode="numeric" placeholder="es. 18"></label><label>Su tacca (mm)<input id="wzM" type="number" inputmode="numeric" value="${snap(25)}"></label></div>`;
+    body = `${testa(5, info.nome)}<p class="sm2">${info.testo}</p>
+      <div class="prev"><b>${pr.mm} mm · ${esc(pr.grip)}</b><span class="mut sm">Prima c’è il riscaldamento. Il test dura circa ${Math.round((durata(pr) + 360) / 60)} minuti in tutto.</span></div>
+      <button class="btn pri" data-act="wz-test">Inizia il test</button>
+      <details class="det"><summary>Ho già un risultato recente</summary>${giaFatto}<button class="btn sec" data-act="wz-risultato">Usa questo risultato</button></details>
+      <button class="btn sec" data-act="wz-indietro">Indietro</button>`;
+  }
+  if (w.step === 5) {
+    const pi = w.proposta, g = +S.attr.giorni || 2;
+    const sett = [1, 2, 3, 4].map(s => `<div class="wk"><div class="wk-h"><b>Settimana ${s}</b><span class="mut sm">${s === 4 ? 'scarico' : s === 1 ? 'si parte' : 'carico che sale'}</span></div>${pi.items.filter(x => x.sett === s).map(x => `<div class="wk-r"><span>${esc(x.p.name)}</span><span class="mut sm">${x.p.mm} mm · ${x.p.sets}×${x.p.reps > 1 ? x.p.reps + ' rip' : x.p.hang + ' s'} · ${fmtLoad(x.p.load)}</span></div>`).join('')}</div>`).join('');
+    body = `<div class="mut sm">Fatto</div><h1 class="serif big2">Ecco il tuo piano</h1>
+      <p class="sm2">Quattro settimane, ${g} ${g === 1 ? 'sessione' : 'sessioni'} a settimana: tre settimane in cui il carico sale e una di scarico. Poi rifai il test e l’app prepara il blocco successivo.</p>
+      ${sett}
+      <p class="mut sm">Carichi e tacche vengono dal test e dalla tua attrezzatura. Dopo ogni sessione la progressione li aggiusta da sola.</p>
+      <button class="btn pri" data-act="wz-inizia">Inizia questo piano</button><button class="lnk" data-act="wz-ricomincia">Rifai le domande</button>`;
+  }
+  return `<div class="scr mid"><div class="glass card intro">${body}</div></div>`;
+}
+function vPiano() {
+  if (ui.wiz) return vWizard();
+  if (!S.piano || !S.attr || !S.test) return `<div class="scr">${sezTit('Il tuo allenamento', 'Piano')}
+    <section class="glass card"><h2 class="serif h3">Un piano fatto per te</h2><p class="sm2">Cinque domande sulla tua attrezzatura e sul tuo livello, un test breve, e l’app prepara un piano di 4 settimane con tacche e carichi già impostati. Tu devi solo allenarti.</p>
+      <button class="btn pri" data-act="wz-start">Iniziamo</button></section>
+    <section class="glass card"><div class="t17">Preferisci fare da te?</div><p class="sm2">Puoi sempre scegliere un protocollo standard o crearne uno tuo.</p><button class="btn sec" data-act="nav" data-v="protocolli">Protocolli</button></section></div>`;
+  const pi = S.piano, cur = itemPiano(), fatti = pi.items.filter(x => x.fatto).length;
+  const settCur = cur ? cur.sett : 4;
+  const righe = pi.items.filter(x => x.sett === settCur).map(x => `<div class="wk-r${cur && pi.items.indexOf(x) === cur.idx ? ' cur' : ''}"><span>${x.fatto ? ic('check', 16, 2.4) : ''}${esc(x.p.name)}</span><span class="mut sm">${x.p.mm} mm · ${x.p.sets}×${x.p.reps > 1 ? x.p.reps + ' rip' : x.p.hang + ' s'} · ${fmtLoad(x.p.load)}</span></div>`).join('');
+  return `<div class="scr">${sezTit('Il tuo allenamento', 'Piano')}
+    <section class="glass card">
+      ${cur ? `<div class="kick"><i style="background:var(--acc)"></i>Settimana ${cur.sett} di 4${cur.sett === 4 ? ' · scarico' : ''}</div><h2 class="serif h3">Prossima: ${esc(cur.p.name)}</h2>` : '<h2 class="serif h3">Blocco finito</h2><p class="sm2">Hai completato le 4 settimane. Rifai il test: l’app prepara il blocco successivo con i nuovi valori.</p>'}
+      <div class="bar thick"><i style="width:${Math.round(fatti / pi.items.length * 100)}%"></i></div><div class="mut sm">${fatti} di ${pi.items.length} sessioni fatte</div>
+      <div class="wk">${righe}</div>
+      ${cur ? '<button class="btn pri" data-act="vai-oggi">Allenati ora</button>' : '<button class="btn pri" data-act="wz-test-diretto">Rifai il test</button>'}</section>
+    <section class="glass card"><div class="t17">Il tuo profilo</div>
+      <p class="sm2">${esc(TEST_INFO[S.test.tipo].nome)}: ${S.test.tipo === 'max' ? `${fmtN(S.test.valore)} kg in totale su ${S.test.mm} mm (${Math.round(S.test.valore / S.settings.bw * 100)}% del peso)` : S.test.tipo === 'med' ? `tacca minima ${S.test.mm} mm` : `${S.test.valore} s su ${S.test.mm} mm`}, ${new Date(S.test.data).toLocaleDateString('it-IT')}.</p>
+      <p class="mut sm">Tacche: ${tacche().join(', ')} mm · zavorra: ${{ no: 'no', '10': 'fino a 10 kg', '20': 'fino a 20 kg', piu: 'oltre 20 kg' }[S.attr.zavorra]} · carrucola: ${S.attr.scarico === 'si' ? 'sì' : 'no'}</p>
+      <div class="rowb"><button class="btn sec" data-act="wz-test-diretto">Rifai il test</button><button class="btn sec" data-act="wz-start">Cambia risposte</button></div></section>
+    <section class="glass card"><div class="t17">Altre possibilità</div><p class="sm2">Se un giorno vuoi fare altro, puoi scegliere un protocollo standard o crearne uno tuo. Il piano ti aspetta.</p><button class="btn sec" data-act="nav" data-v="protocolli">Protocolli e personalizzati</button></section>
+  </div>`;
+}
+
+</script>
+</body>
+</html>
